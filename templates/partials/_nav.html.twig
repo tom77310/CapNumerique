@@ -1,0 +1,47 @@
+<ul class="navbar-nav text-center mx-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="">Accueil</a>
+    </li>
+<li>
+        <a class="nav-link" href="">Orientation Professionnelle</a>
+</li>
+<li>
+        <a class="nav-link" href="">insertion Professionnelle</a>
+</li>
+<li>
+        <a class="nav-link" href="">Découvrir les métiers de la tech</a>
+</li>
+{# <li>
+        <a class="nav-link" href="">Loisirs</a>
+</li>
+<li>
+        <a class="nav-link" href="">Sport</a>
+</li> #}
+</ul>
+<div class="text-right">
+
+    {% if app.user %}
+        <span class="navbar-text mx-2">
+            Bonjour 
+        </span>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="nav-item btn btn-outline-warning"
+               href="">Espace Admin</a>
+        {% endif %}
+
+        <a class="nav-item btn btn-outline-info"
+           href="">Déconnexion</a>
+
+    {% else %}
+
+        <a class="nav-item btn btn-outline-warning"
+           href="">Inscription</a>
+
+        <a class="nav-item btn btn-outline-info"
+           href="">Connexion</a>
+
+    {% endif %}
+
+
+</div>

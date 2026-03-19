@@ -1,6 +1,6 @@
 Choses a faire 
 - Créer la base de données (fait)
 - Créer la table "utilisateur" (fait)
-- Créer la barre de nav pour le contact
-- Créer la barre de nav
-- Créer le footer
+- Créer la barre de nav pour le contact (fait)
+- Créer la barre de nav (fait)
+- Créer le footer (fait)
