@@ -1,6 +1,6 @@
 <ul class="navbar-nav text-center mx-auto">
     <li class="nav-item">
-        <a class="nav-link" href="">Accueil</a>
+        <a class="nav-link" href="{{ path('app_default')}}">Accueil</a>
     </li>
 <li>
         <a class="nav-link" href="">Orientation Professionnelle</a>
@@ -28,18 +28,24 @@
         {% if is_granted('ROLE_ADMIN') %}
             <a class="nav-item btn btn-outline-warning"
                href="">Espace Admin</a>
+        {% elseif is_granted('ROLE_CANDIDAT') %}
+            <a class="nav-item btn btn-outline-warning"
+               href="">Espace Candidat</a>
+        {% elseif is_granted('ROLE_ENTREPRISE') %}
+            <a class="nav-item btn btn-outline-warning"
+               href="">Espace Entreprise</a>
         {% endif %}
 
         <a class="nav-item btn btn-outline-info"
-           href="">Déconnexion</a>
+           href="{{ path('security_logout')}}">Déconnexion</a> 
 
     {% else %}
 
         <a class="nav-item btn btn-outline-warning"
-           href="">Inscription</a>
+           href="{{ path('Utilisateur_inscriptioncandidat')}}">Inscription</a> 
 
         <a class="nav-item btn btn-outline-info"
-           href="">Connexion</a>
+           href="{{ path('security_login')}}">Connexion</a>
 
     {% endif %}
 

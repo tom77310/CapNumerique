@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +31,27 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Nom = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Prenom = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $Telephone = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTime $datedenaissance = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Pays = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Ville = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $CV = null;
 
     public function getId(): ?int
     {
@@ -110,5 +132,89 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->Nom;
+    }
+
+    public function setNom(string $Nom): static
+    {
+        $this->Nom = $Nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->Prenom;
+    }
+
+    public function setPrenom(string $Prenom): static
+    {
+        $this->Prenom = $Prenom;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->Telephone;
+    }
+
+    public function setTelephone(string $Telephone): static
+    {
+        $this->Telephone = $Telephone;
+
+        return $this;
+    }
+
+    public function getDatedenaissance(): ?\DateTime
+    {
+        return $this->datedenaissance;
+    }
+
+    public function setDatedenaissance(\DateTime $datedenaissance): static
+    {
+        $this->datedenaissance = $datedenaissance;
+
+        return $this;
+    }
+
+    public function getPays(): ?string
+    {
+        return $this->Pays;
+    }
+
+    public function setPays(string $Pays): static
+    {
+        $this->Pays = $Pays;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->Ville;
+    }
+
+    public function setVille(string $Ville): static
+    {
+        $this->Ville = $Ville;
+
+        return $this;
+    }
+
+    public function getCV(): ?string
+    {
+        return $this->CV;
+    }
+
+    public function setCV(?string $CV): static
+    {
+        $this->CV = $CV;
+
+        return $this;
     }
 }

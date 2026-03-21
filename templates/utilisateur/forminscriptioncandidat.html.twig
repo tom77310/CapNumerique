@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription Candidat {% endblock %}
+{% block page_title %} Inscription Candidat {% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-8 mx-auto">
+            {{ form(formcandidat, {'method': 'POST'}, {'attr': {'novalidate': 'novalidate'}}) }}
+        </div>
+    </div>
+{% endblock %}
