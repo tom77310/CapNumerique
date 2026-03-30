@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription Entreprise {% endblock %}
+{% block page_title %} Inscription Entreprise {% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-5 border-bottom pb-2">Inscription Entreprises</h2>
+        {{ form_start(formentreprise) }}
+        <div class="row">
+            {# Colonne de gauche #}
+            <div class="col-md-6">
+                 <h4 class="border-bottom pb-2 mb-4">Informations Générales</h4>
+                <div class="mb-3">
+                    <label for="">Nom de l'entreprise</label>
+                    {{ form_widget(formentreprise.Nom) }}
+                </div>
+                <div class="mb-3">
+                    <label for="">Numéro de SIRET</label>
+                    {{ form_widget(formentreprise.SIRET) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(formentreprise.email) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(formentreprise.Telephone) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(formentreprise.Pays) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(formentreprise.Ville) }}
+                </div>
+                <div class="mb-3">
+                    <label class="">Mot de passe</label>
+                    {{ form_widget(formentreprise.password) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4 class="border-bottom pb-2 mb-4">Informations Complémentaires</h4>
+                <div class="mb-2">
+                    <label class="fw-bold">Votre Secteur d'activité</label>
+                    {{ form_widget(formentreprise.Secteur) }}
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold mt-3">Taille de l'entreprise</label>
+                    {{ form_widget(formentreprise.taille) }}
+                </div>
+                <div class="mb-2 mt-4">
+                    <label class="fw-bold">Veuillez Insérer le lien vers votre profil linkedin </label>
+                    {{ form_widget(formentreprise.linkedin) }}
+                </div>
+                <div class="mb-4 mt-3">
+                    <label class="fw-bold">Vous pouvez mettre le lien vers votre site web (optionnel)</label>
+                    {{ form_widget(formentreprise.site) }}
+                </div>
+                <div class="mt-3">
+                    <label class="fw-bold">Vous pouvez nous faire une petite description de votre entreprise (facultatif)</label>
+                    {{ form_widget(formentreprise.description) }}
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            {{ form_row(formentreprise.submit) }}
+        </div>
+        {{ form_end(formentreprise) }}
+    </div>
+
+{% endblock %}

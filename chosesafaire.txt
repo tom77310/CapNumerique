@@ -6,5 +6,18 @@ Choses a faire
 - Créer le footer (fait)
 - Faire fonctionner inscription/connexion (fait)
 - Formulaire de connexion (fait)
-- Formulaire d'inscription Candidat
-- Formulaire d'inscription Entreprise
+- Formulaire d'inscription Candidat (fait)
+- Page de "transition" pour les differents formulaires candidat ou entreprise. (fait)
+- Formulaire d'inscription Entreprise 
+- Page espace candidat
+- Page espace entreprise
+- Page espace admin
+- tableau "trello" admin
+- page gestion candidat
+- formulaire de contact
+- pages du footer
+- rajouter un boutton de retour dans les formulaires d'inscription
+- faire la difference demandé dans le formulaire inscription candidat voir video
+- corriger la gestion des fichiers dans le formulaire d'inscription candidat
+- rajouter champ "sexe" ou "civilité" dans les 2 formulaires
+- Système d'avis ?

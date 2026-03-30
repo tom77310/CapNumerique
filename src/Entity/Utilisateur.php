@@ -32,26 +32,50 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $Nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $Prenom = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 20, nullable: true)]
     private ?string $Telephone = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $datedenaissance = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $Pays = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $Ville = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $CV = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $besoin = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $recherche = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $linkedin = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $SIRET = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Secteur = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Taille = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Site = null;
 
     public function getId(): ?int
     {
@@ -214,6 +238,102 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCV(?string $CV): static
     {
         $this->CV = $CV;
+
+        return $this;
+    }
+
+    public function getBesoin(): ?array
+    {
+        return $this->besoin;
+    }
+
+    public function setBesoin(?array $besoin): static
+    {
+        $this->besoin = $besoin;
+
+        return $this;
+    }
+
+    public function getRecherche(): ?array
+    {
+        return $this->recherche;
+    }
+
+    public function setRecherche(?array $recherche): static
+    {
+        $this->recherche = $recherche;
+
+        return $this;
+    }
+
+    public function getLinkedin(): ?string
+    {
+        return $this->linkedin;
+    }
+
+    public function setLinkedin(?string $linkedin): static
+    {
+        $this->linkedin = $linkedin;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getSIRET(): ?string
+    {
+        return $this->SIRET;
+    }
+
+    public function setSIRET(?string $SIRET): static
+    {
+        $this->SIRET = $SIRET;
+
+        return $this;
+    }
+
+    public function getSecteur(): ?string
+    {
+        return $this->Secteur;
+    }
+
+    public function setSecteur(?string $Secteur): static
+    {
+        $this->Secteur = $Secteur;
+
+        return $this;
+    }
+
+    public function getTaille(): ?string
+    {
+        return $this->Taille;
+    }
+
+    public function setTaille(?string $Taille): static
+    {
+        $this->Taille = $Taille;
+
+        return $this;
+    }
+
+    public function getSite(): ?string
+    {
+        return $this->Site;
+    }
+
+    public function setSite(?string $Site): static
+    {
+        $this->Site = $Site;
 
         return $this;
     }
