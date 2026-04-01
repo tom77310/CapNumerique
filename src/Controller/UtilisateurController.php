@@ -80,4 +80,15 @@ final class UtilisateurController extends AbstractController
             'formentreprise' => $formEntreprise
         ]);
     }
+    #[Route('/espaceCandidat', name: 'Utilisateur_espaceCandidat')]
+    public function espaceCandidat(): Response
+    {
+        return $this->render('utilisateur/Candidat/espaceCandidat.html.twig');
+    }
+    #[Route('/espaceEntreprise', name: 'Utilisateur_espaceEntreprise')]
+    public function espaceEntreprise(): Response
+    {
+        return $this->render('utilisateur/Entreprises/espaceEntreprise.html.twig');
+    }
+
 }

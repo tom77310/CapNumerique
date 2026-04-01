@@ -8,16 +8,29 @@ Choses a faire
 - Formulaire de connexion (fait)
 - Formulaire d'inscription Candidat (fait)
 - Page de "transition" pour les differents formulaires candidat ou entreprise. (fait)
-- Formulaire d'inscription Entreprise 
-- Page espace candidat
-- Page espace entreprise
-- Page espace admin
-- tableau "trello" admin
-- page gestion candidat
-- formulaire de contact
-- pages du footer
+- Formulaire d'inscription Entreprise (fait)
+- Accueil Page espace candidat (fait)
+- Accueil Page espace entreprise (fait)
+- Accueil Page espace admin (fait)
+- Refaire Page Connexion (fait)
+- tableau "trello" admin V1 (fait)
+- page gestion candidat (fait)
 - rajouter un boutton de retour dans les formulaires d'inscription
 - faire la difference demandé dans le formulaire inscription candidat voir video
 - corriger la gestion des fichiers dans le formulaire d'inscription candidat
 - rajouter champ "sexe" ou "civilité" dans les 2 formulaires
-- Système d'avis ?
+
+
+- formulaire de contact utile ?
+- Système d'avis / commentaire ?
+- système mot de passe oublié
+- Trello V2
+    - le lier aux utilisateurs, uniquement candidats
+    - Supprimer une carte 
+    - Modifier une carte
+    - Voir le detail de la carte, peut être en clickant dessus comme dans trello
+    - Ajouter une carte, est ce pertinant ? 
+- pages du footer, section " a propos de nous"
+    - Mentions légales
+    - Politique de confidentialité
+    - Conditions générales d'utilisation

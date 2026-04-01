@@ -27,13 +27,13 @@
 
         {% if is_granted('ROLE_ADMIN') %}
             <a class="nav-item btn btn-outline-warning"
-               href="">Espace Admin</a>
+               href="{{ path('Admin_espaceAdmin')}}">Espace Admin</a>
         {% elseif is_granted('ROLE_CANDIDAT') %}
             <a class="nav-item btn btn-outline-warning"
-               href="">Espace Candidat</a>
+               href="{{ path('Utilisateur_espaceCandidat')}}">Espace Candidat</a>
         {% elseif is_granted('ROLE_ENTREPRISE') %}
             <a class="nav-item btn btn-outline-warning"
-               href="">Espace Entreprise</a>
+               href="{{ path('Utilisateur_espaceEntreprise')}}">Espace Entreprise</a>
         {% endif %}
 
         <a class="nav-item btn btn-outline-info"

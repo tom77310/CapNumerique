@@ -11,6 +11,16 @@
             rel="stylesheet" 
             integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
             crossorigin="anonymous">
+            {# CSS pour la page du trello #}
+            <style>
+                .card-item {
+                    cursor: grab; /* curseur style main ouverte */
+                }
+
+                .card-item:active {
+                    cursor: grabbing; /* curseur style main fermée pendant le drag */
+                }
+            </style>
         {% endblock %}
         {# Icones bootstrap #}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
