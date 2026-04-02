@@ -5,12 +5,22 @@
 
 {% block body %}
     <div class="container mt-5">
+        <a href="{{ path('Utilisateur_choixinscription')}}">Retour</a>
         <h2 class="text-center mb-5 border-bottom pb-2">Inscription Candidats</h2>
         {{ form_start(formcandidat) }}
         <div class="row">
             {# Colonne de gauche #}
             <div class="col-md-6">
                 <h4 class="border-bottom pb-2 mb-4">Informations Personnelles</h4>
+                <div class="mb-3">
+                    <label class="fw-bold">Sexe</label>
+                    {% for child in formcandidat.Sexe %}
+                        <div class="form-check form-check-inline">
+                            {{ form_widget(child, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(child, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
                 <div class="mb-3">
                     {{ form_row(formcandidat.Nom) }}
                 </div>
@@ -44,7 +54,7 @@
                     <label class="fw-bold">Votre Besoin</label>
                     {{ form_widget(formcandidat.besoin) }}
                 </div>
-                <div class="form-check mb-2">
+                <div class="form-check mb-2" id="bloc-recherche" style="display: none;">
                     <label class="fw-bold mt-3">Votre Recherche</label>
                     {{ form_widget(formcandidat.recherche) }}
                 </div>
@@ -67,4 +77,33 @@
         </div>
         {{ form_end(formcandidat) }}
     </div>
+
+    {% block javascript %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const besoinInputs = document.querySelectorAll('[name="form_candidat[besoin][]"]');
+                const blocRecherche = document.getElementById('bloc-recherche');
+
+                function toggleRecherche() {
+                    let show = false;
+
+                    besoinInputs.forEach(input => {
+                        if (input.checked && input.value === 'orientation') {
+                            show = true;
+                        }
+                    });
+
+                    blocRecherche.style.display = show ? 'block' : 'none';
+                }
+
+                // Vérifie au chargement (si formulaire pré-rempli)
+                toggleRecherche();
+
+                // Ajoute l'écoute sur chaque checkbox
+                besoinInputs.forEach(input => {
+                    input.addEventListener('change', toggleRecherche);
+                });
+            });
+        </script>
+    {% endblock %}
 {% endblock %}

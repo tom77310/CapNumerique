@@ -3,95 +3,95 @@
 {% block title %} Gestion Candidat - Admin {% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="mb-4 text-center">Gestion des candidats</h1>
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">Gestion des candidats</h1>
 
-    <div class="row">
-        {% for colonne in colonnes %}
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        {{ colonne.titre }}
+        <div class="row">
+            {% for colonne in colonnes %}
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            {{ colonne.titre }}
+                        </div>
+
+                        <ul class="list-group list-group-flush cards" data-colonne-id="{{ colonne.id }}">
+                            {% set cartes = colonne.colonne|sort((a, b) => a.position <=> b.position) %}
+                            {% if cartes|length > 0 %}
+                                {% for carte in cartes %}
+                                    <li class="list-group-item card-item" data-carte-id="{{ carte.id }}">
+                                        {{ carte.titre }}
+                                    </li>
+                                {% endfor %}
+                                <li class="list-group-item text-muted no-card" style="display:none;">Aucune carte</li>
+                            {% else %}
+                                <li class="list-group-item text-muted no-card">Aucune carte</li>
+                            {% endif %}
+                        </ul>
                     </div>
-
-                    <ul class="list-group list-group-flush cards" data-colonne-id="{{ colonne.id }}">
-                        {% set cartes = colonne.colonne|sort((a, b) => a.position <=> b.position) %}
-                        {% if cartes|length > 0 %}
-                            {% for carte in cartes %}
-                                <li class="list-group-item card-item" data-carte-id="{{ carte.id }}">
-                                    {{ carte.titre }}
-                                </li>
-                            {% endfor %}
-                            <li class="list-group-item text-muted no-card" style="display:none;">Aucune carte</li>
-                        {% else %}
-                            <li class="list-group-item text-muted no-card">Aucune carte</li>
-                        {% endif %}
-                    </ul>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 
-<!-- SortableJS -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <!-- SortableJS -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const lists = document.querySelectorAll('.cards');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lists = document.querySelectorAll('.cards');
 
-    lists.forEach(list => {
-        new Sortable(list, {
-            group: 'shared',
-            animation: 150,
-            onStart: function(evt) {
-                evt.item.style.cursor = 'grabbing';
-            },
-            onEnd: function (evt) {
-                const colonne = evt.to;
-                const colonneId = colonne.dataset.colonneId;
-
-                // Toutes les cartes de la colonne
-                const cartes = Array.from(colonne.querySelectorAll('.card-item'));
-
-                // Préparer les positions à envoyer
-                const positions = cartes.map((carte, index) => ({
-                    carteId: carte.dataset.carteId,
-                    position: index + 1
-                }));
-
-                // Envoie au serveur
-                fetch('/utilisateur/admin/trello/deplacement-carte', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': '{{ csrf_token("Admin_deplacementcartetrello") }}'
+            lists.forEach(list => {
+                new Sortable(list, {
+                    group: 'shared',
+                    animation: 150,
+                    onStart: function(evt) {
+                        evt.item.style.cursor = 'grabbing';
                     },
-                    body: JSON.stringify({
-                        colonneId: colonneId,
-                        positions: positions
-                    })
+                    onEnd: function (evt) {
+                        const colonne = evt.to;
+                        const colonneId = colonne.dataset.colonneId;
+
+                        // Toutes les cartes de la colonne
+                        const cartes = Array.from(colonne.querySelectorAll('.card-item'));
+
+                        // Préparer les positions à envoyer
+                        const positions = cartes.map((carte, index) => ({
+                            carteId: carte.dataset.carteId,
+                            position: index + 1
+                        }));
+
+                        // Envoie au serveur
+                        fetch('/utilisateur/admin/trello/deplacement-carte', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-TOKEN': '{{ csrf_token("Admin_deplacementcartetrello") }}'
+                            },
+                            body: JSON.stringify({
+                                colonneId: colonneId,
+                                positions: positions
+                            })
+                        });
+
+                        // Gérer le message "Aucune carte"
+                        const noCard = colonne.querySelector('.no-card');
+                        if (cartes.length === 0) {
+                            noCard.style.display = 'block';
+                        } else {
+                            noCard.style.display = 'none';
+                        }
+
+                        evt.item.style.cursor = 'grab';
+                    }
                 });
+            });
 
-                // Gérer le message "Aucune carte"
-                const noCard = colonne.querySelector('.no-card');
-                if (cartes.length === 0) {
-                    noCard.style.display = 'block';
-                } else {
-                    noCard.style.display = 'none';
-                }
-
-                evt.item.style.cursor = 'grab';
-            }
+            // Curseur main sur toutes les cartes
+            const allCards = document.querySelectorAll('.card-item');
+            allCards.forEach(carte => {
+                carte.style.cursor = 'grab';
+            });
         });
-    });
-
-    // Curseur main sur toutes les cartes
-    const allCards = document.querySelectorAll('.card-item');
-    allCards.forEach(carte => {
-        carte.style.cursor = 'grab';
-    });
-});
-</script>
+    </script>
 {% endblock %}

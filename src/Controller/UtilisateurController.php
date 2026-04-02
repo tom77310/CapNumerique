@@ -22,30 +22,51 @@ final class UtilisateurController extends AbstractController
     }
 
     #[Route('/inscriptionCandidat', name: 'Utilisateur_inscriptioncandidat')]
-    public function inscriptionCandidat(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
+    public function inscriptionCandidat(Request $request,EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher): Response 
     {
         // Creation d'un nouvel utilisateur
         $candidat = new Utilisateur;
-        $candidat->setRoles(['ROLE_CANDIDAT']); // Attribué par default dés l'inscription
+        $candidat->setRoles(['ROLE_CANDIDAT']);
 
         $formCandidat = $this->createForm(FormCandidatType::class, $candidat);
         $formCandidat->handleRequest($request);
 
         if ($formCandidat->isSubmitted() && $formCandidat->isValid()) {
-            // hashage du mot de passe 
-            $candidat->setPassword($hasher->hashPassword($candidat, $candidat->getPassword()));
 
-            // Sauvegarder les données dans la base de données
+            //  Hash du mot de passe
+            $candidat->setPassword(
+                $hasher->hashPassword($candidat, $candidat->getPassword())
+            );
+
+            //  Gestion du fichier CV
+            $cvFile = $formCandidat->get('CV')->getData();
+
+            if ($cvFile) {
+                $newFilename = uniqid() . '.' . $cvFile->guessExtension();
+
+                try {
+                    $cvFile->move(
+                        $this->getParameter('cv_directory'),
+                        $newFilename
+                    );
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload du CV');
+                }
+
+                // On enregistre le nom du fichier en base
+                $candidat->setCV($newFilename);
+            }
+
+            //  Sauvegarde en base
             $entityManager->persist($candidat);
             $entityManager->flush();
 
-            // Notification de succès
-            $this->addFlash('success', 'Votre compte a bien été crée !');
+            //  Message succès
+            $this->addFlash('success', 'Votre compte a bien été créé !');
 
-            // Redirection page de connexion
             return $this->redirectToRoute('security_login');
         }
-        // Affichage du formulaire d'inscription candidat
+
         return $this->render('utilisateur/forminscriptioncandidat.html.twig', [
             'formcandidat' => $formCandidat
         ]);

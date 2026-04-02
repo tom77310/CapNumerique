@@ -77,6 +77,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Site = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $sexe = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -334,6 +337,18 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSite(?string $Site): static
     {
         $this->Site = $Site;
+
+        return $this;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(string $sexe): static
+    {
+        $this->sexe = $sexe;
 
         return $this;
     }

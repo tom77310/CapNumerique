@@ -6,19 +6,25 @@ Choses a faire
 - Créer le footer (fait)
 - Faire fonctionner inscription/connexion (fait)
 - Formulaire de connexion (fait)
+
+30/03/26
 - Formulaire d'inscription Candidat (fait)
 - Page de "transition" pour les differents formulaires candidat ou entreprise. (fait)
 - Formulaire d'inscription Entreprise (fait)
+
+01/04/26
 - Accueil Page espace candidat (fait)
 - Accueil Page espace entreprise (fait)
 - Accueil Page espace admin (fait)
 - Refaire Page Connexion (fait)
 - tableau "trello" admin V1 (fait)
 - page gestion candidat (fait)
-- rajouter un boutton de retour dans les formulaires d'inscription
-- faire la difference demandé dans le formulaire inscription candidat voir video
-- corriger la gestion des fichiers dans le formulaire d'inscription candidat
-- rajouter champ "sexe" ou "civilité" dans les 2 formulaires
+- rajouter un lien de retour dans les formulaires d'inscription (fait)
+
+02/04/26
+- faire la difference demandé dans le formulaire inscription candidat voir video (fait)
+- corriger la gestion des fichiers dans le formulaire d'inscription candidat (fait)
+- rajouter champ "sexe" dans le formulaire inscription candidat (fait)
 
 
 - formulaire de contact utile ?
