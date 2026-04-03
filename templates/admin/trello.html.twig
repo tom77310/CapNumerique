@@ -18,8 +18,22 @@
                             {% set cartes = colonne.colonne|sort((a, b) => a.position <=> b.position) %}
                             {% if cartes|length > 0 %}
                                 {% for carte in cartes %}
-                                    <li class="list-group-item card-item" data-carte-id="{{ carte.id }}">
-                                        {{ carte.titre }}
+                                    <li class="list-group-item card-item"
+                                        data-carte-id="{{ carte.id }}"
+                                        data-nom="{{ carte.utilisateur.nom }}"
+                                        data-prenom="{{ carte.utilisateur.prenom }}"
+                                        data-email="{{ carte.utilisateur.email }}"
+                                        data-telephone="{{ carte.utilisateur.telephone }}"
+                                        data-pays="{{ carte.utilisateur.pays }}"
+                                        data-ville="{{ carte.utilisateur.ville }}"
+                                        data-cv="{{ carte.utilisateur.cv }}"
+                                        data-linkedin="{{ carte.utilisateur.linkedin }}"
+                                        data-sexe="{{ carte.utilisateur.sexe }}"
+                                        data-datenaissance="{{ carte.utilisateur.datedenaissance ? carte.utilisateur.datedenaissance|date('d/m/Y') : '' }}"
+                                        data-besoins='{{ carte.utilisateur.besoin|json_encode }}'
+                                        data-recherche='{{ carte.utilisateur.recherche|json_encode }}'
+                                        data-description="{{ carte.utilisateur.description }}">
+                                        {{ carte.utilisateur.nom }}
                                     </li>
                                 {% endfor %}
                                 <li class="list-group-item text-muted no-card" style="display:none;">Aucune carte</li>
@@ -32,6 +46,47 @@
             {% endfor %}
         </div>
     </div>
+
+    <!-- Modal utilisateur -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Détails utilisateur</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Nom :</strong> <span id="modalNom"></span></p>
+            <p><strong>Prénom :</strong> <span id="modalPrenom"></span></p>
+            <p><strong>Email :</strong> <span id="modalEmail"></span></p>
+            <p><strong>Téléphone :</strong> <span id="modalTelephone"></span></p>
+            <p><strong>Pays :</strong> <span id="modalPays"></span></p>
+            <p><strong>Ville :</strong> <span id="modalVille"></span></p>
+            <p><strong>Sexe :</strong> <span id="modalSexe"></span></p>
+            <p><strong>Date de naissance :</strong> <span id="modalDateNaissance"></span></p>
+            <p><strong>CV :</strong> <span id="modalCv"></span></p>
+            <p><strong>LinkedIn :</strong> <span id="modalLinkedin"></span></p>
+
+            <p><strong>Besoins :</strong></p>
+            <ul id="modalBesoins"></ul>
+
+            <p><strong>Recherche :</strong></p>
+            <ul id="modalRecherche"></ul>
+
+            <p><strong>Description :</strong></p>
+            <p id="modalDescription"></p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" disabled>Supprimer</button>
+            <button class="btn btn-primary" disabled>Modifier</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- SortableJS -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -51,16 +106,13 @@
                         const colonne = evt.to;
                         const colonneId = colonne.dataset.colonneId;
 
-                        // Toutes les cartes de la colonne
                         const cartes = Array.from(colonne.querySelectorAll('.card-item'));
 
-                        // Préparer les positions à envoyer
                         const positions = cartes.map((carte, index) => ({
                             carteId: carte.dataset.carteId,
                             position: index + 1
                         }));
 
-                        // Envoie au serveur
                         fetch('/utilisateur/admin/trello/deplacement-carte', {
                             method: 'POST',
                             headers: {
@@ -74,7 +126,6 @@
                             })
                         });
 
-                        // Gérer le message "Aucune carte"
                         const noCard = colonne.querySelector('.no-card');
                         if (cartes.length === 0) {
                             noCard.style.display = 'block';
@@ -87,10 +138,52 @@
                 });
             });
 
-            // Curseur main sur toutes les cartes
             const allCards = document.querySelectorAll('.card-item');
             allCards.forEach(carte => {
                 carte.style.cursor = 'grab';
+            });
+
+            // CLIC SUR CARTE → MODAL
+            allCards.forEach(carte => {
+                carte.addEventListener('click', function () {
+
+                    document.getElementById('modalNom').textContent = this.dataset.nom;
+                    document.getElementById('modalPrenom').textContent = this.dataset.prenom;
+                    document.getElementById('modalEmail').textContent = this.dataset.email;
+                    document.getElementById('modalTelephone').textContent = this.dataset.telephone;
+                    document.getElementById('modalPays').textContent = this.dataset.pays;
+                    document.getElementById('modalVille').textContent = this.dataset.ville;
+                    document.getElementById('modalSexe').textContent = this.dataset.sexe;
+                    document.getElementById('modalDateNaissance').textContent = this.dataset.datenaissance;
+                    document.getElementById('modalCv').textContent = this.dataset.cv;
+                    document.getElementById('modalLinkedin').textContent = this.dataset.linkedin;
+                    document.getElementById('modalDescription').textContent = this.dataset.description;
+
+                    // JSON → liste
+                    const besoins = JSON.parse(this.dataset.besoins || "[]");
+                    const recherche = JSON.parse(this.dataset.recherche || "[]");
+
+                    const besoinsList = document.getElementById('modalBesoins');
+                    const rechercheList = document.getElementById('modalRecherche');
+
+                    besoinsList.innerHTML = "";
+                    rechercheList.innerHTML = "";
+
+                    besoins.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        besoinsList.appendChild(li);
+                    });
+
+                    recherche.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        rechercheList.appendChild(li);
+                    });
+
+                    const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                    modal.show();
+                });
             });
         });
     </script>

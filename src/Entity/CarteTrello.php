@@ -27,6 +27,10 @@ class CarteTrello
     #[ORM\JoinColumn(nullable: false)]
     private ?ColonneTrello $colonne = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $utilisateur = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +80,18 @@ class CarteTrello
     public function setColonne(?ColonneTrello $colonne): static
     {
         $this->colonne = $colonne;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }

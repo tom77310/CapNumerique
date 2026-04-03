@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Form\FormCandidatType;
 use App\Form\FormEntrepriseType;
+use App\Repository\ColonneTrelloRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -111,5 +112,4 @@ final class UtilisateurController extends AbstractController
     {
         return $this->render('utilisateur/Entreprises/espaceEntreprise.html.twig');
     }
-
 }

@@ -26,17 +26,30 @@ Choses a faire
 - corriger la gestion des fichiers dans le formulaire d'inscription candidat (fait)
 - rajouter champ "sexe" dans le formulaire inscription candidat (fait)
 
-
-- formulaire de contact utile ?
-- Système d'avis / commentaire ?
-- système mot de passe oublié
+03/04/2026
 - Trello V2
-    - le lier aux utilisateurs, uniquement candidats
+    - le lier aux utilisateurs, uniquement candidats (fait)
+    - Voir le detail de la carte, peut être en clickant dessus comme dans trello (fait)
+
     - Supprimer une carte 
     - Modifier une carte
-    - Voir le detail de la carte, peut être en clickant dessus comme dans trello
-    - Ajouter une carte, est ce pertinant ? 
+    - Modifier le titre de la colonne
+    - Supprimer une colonne
+    - Ajouter une nouvelle colonne
 - pages du footer, section " a propos de nous"
     - Mentions légales
     - Politique de confidentialité
     - Conditions générales d'utilisation
+
+
+
+
+- Faire en sorte qu'on puisse actualisé la page du trello
+
+
+
+Questions 
+- formulaire de contact utile ?
+- Système d'avis / commentaire ?
+- système mot de passe oublié 
+- Version Anglaise ?
