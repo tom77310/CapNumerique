@@ -5,15 +5,20 @@
 {% block body %}
     <div class="container mt-4">
         <h1 class="mb-4 text-center">Gestion des candidats</h1>
-
+        <div class="mb-4 text-center">
+            <input type="text" id="newColonneTitre" class="form-control d-inline-block w-25" placeholder="Nom de la colonne">
+            <button id="addColonneBtn" class="btn btn-success ms-2">Ajouter une colonne</button>
+        </div>
         <div class="row">
             {% for colonne in colonnes %}
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            {{ colonne.titre }}
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <span class="colonne-titre">{{ colonne.titre }}</span>
+                            <button class="btn btn-sm btn-light edit-colonne-btn" data-colonne-id="{{ colonne.id }}">Modifier le nom</button>
+                            <button class="btn btn-sm btn-danger delete-colonne-btn" data-colonne-id="{{ colonne.id }}">Supprimer la colonne</button>
                         </div>
-                        {# Ne pas supprimer "data-carte-id", car il permet de sauvegarder la positions des cartes et de les deplacer #}
+                        {# Ne pas supprimer "data-carte-id", car il permet de sauvegarder la positions des cartes et de les deplacer #}      
                         <ul class="list-group list-group-flush cards" data-colonne-id="{{ colonne.id }}">
                             {% set cartes = colonne.colonne|sort((a, b) => a.position <=> b.position) %}
                             {% if cartes|length > 0 %}
@@ -253,6 +258,134 @@
             .then(() => location.reload());
         });
 
+        // Modifier le nom de la colonne
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-colonne-btn')) {
+
+                const colonneId = e.target.dataset.colonneId;
+                const header = e.target.closest('.card-header');
+                const titreElement = header.querySelector('.colonne-titre');
+
+                const titreActuel = titreElement.textContent;
+
+                const nouveauTitre = prompt('Modifier le titre :', titreActuel);
+                if (!nouveauTitre) return;
+
+                fetch('{{ path("modifier_colonne") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        colonneId: colonneId,
+                        titre: nouveauTitre
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        titreElement.textContent = data.nouveauTitre;
+                    }
+                });
+            }
+
+        });
+
+        // =========================
+        // SUPPRESSION COLONNE
+        // =========================
+        document.addEventListener('click', function(e) {
+
+            // SUPPRESSION COLONNE
+            if (e.target.classList.contains('delete-colonne-btn')) {
+
+                if (!confirm('Supprimer cette colonne et toutes ses cartes ?')) return;
+
+                const colonneId = e.target.dataset.colonneId;
+                const colonneElement = e.target.closest('.col-md-4');
+
+                fetch('{{ path("delete_colonne") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        colonneId: colonneId
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        colonneElement.remove();
+                    }
+                });
+            }
+
+        });
+
+        // =========================
+        // AJOUT COLONNE
+        // =========================
+        document.getElementById('addColonneBtn').addEventListener('click', function () {
+
+            const input = document.getElementById('newColonneTitre');
+            const titre = input.value.trim();
+
+            if (!titre) {
+                alert('Veuillez entrer un titre');
+                return;
+            }
+
+            fetch('{{ path("add_colonne") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    titre: titre
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+
+                    // Création HTML de la nouvelle colonne
+                    const newCol = document.createElement('div');
+                    newCol.className = 'col-md-4';
+                    newCol.innerHTML = `
+                        <div class="card">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <span class="colonne-titre">${data.titre}</span>
+                                <button class="btn btn-sm btn-light edit-colonne-btn" data-colonne-id="${data.id}">Modifier le nom</button>
+                                <button class="btn btn-sm btn-danger delete-colonne-btn" data-colonne-id="${data.id}">Supprimer la colonne</button>
+                            </div>
+                            <ul class="list-group list-group-flush cards" data-colonne-id="${data.id}">
+                                <li class="list-group-item text-muted no-card">Aucune carte</li>
+                            </ul>
+                        </div>
+                    `;
+
+                    // Ajouter à la ligne des colonnes
+                    document.querySelector('.row').appendChild(newCol);
+
+                    // Pour que les cartes dans la nouvelle colonne soit deplacable
+                    const newList = newCol.querySelector('.cards');
+                    new Sortable(newList, {
+                        group: 'shared',
+                        animation: 150
+                    });
+
+                    // Reset input
+                    input.value = '';
+
+                } else {
+                    alert('Erreur : ' + (data.message || 'Impossible d\'ajouter'));
+                }
+            });
+        });
     });
-</script>
+    </script>
 {% endblock %}

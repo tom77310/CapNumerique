@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ColonneTrello;
 use App\Repository\CarteTrelloRepository;
 use App\Repository\ColonneTrelloRepository;
 use App\Repository\UtilisateurRepository;
@@ -104,4 +105,74 @@ final class AdminController extends AbstractController
 
         return $this->json(['success' => true]);
     }
+    
+    // Modifier le titre d'une colonne
+    #[Route('/trello/colonne/modifier', name: 'modifier_colonne', methods: ['POST'])]
+    public function modifierColonne(Request $request, EntityManagerInterface $em, ColonneTrelloRepository $colRepo)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Récupération de la colonne a modifier
+        $colonne = $colRepo->find($data['colonneId']);
+
+        if (!$colonne || empty($data['titre'])) {
+            return $this->json(['success' => false, 'message' => 'Colonne introuvable ou titre vide'], 400);
+        }
+
+        // Mise a jour du titre de la colonne
+        $colonne->setTitre($data['titre']);
+        $em->flush();
+
+        return $this->json(['success' => true, 'nouveauTitre' => $colonne->getTitre()]);
+    }
+
+    // Supprimer une colonne du trello 
+    #[Route('/trello/delete-colonne', name: 'delete_colonne', methods: ['POST'])]
+    public function deleteColonne(Request $request, EntityManagerInterface $em, ColonneTrelloRepository $colRepo, CarteTrelloRepository $carteRepo)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $colonne = $colRepo->find($data['colonneId']);
+
+        if ($colonne) {
+            // Supprimer toutes les cartes liés à la colonne
+            $cartes = $carteRepo->findBy(['colonne' => $colonne]);
+            foreach ($cartes as $carte) {
+                $em->remove($carte);
+            }
+            // Supprimer la colonne
+            $em->remove($colonne);
+            $em->flush();
+        }
+        return $this->json(['success' => true]);
+    }
+
+    // Ajouter une colonne
+    #[Route('/trello/add-colonne', name: 'add_colonne', methods: ['POST'])]
+    public function addColonne(Request $request, EntityManagerInterface $em, ColonneTrelloRepository $colRepo)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (empty($data['titre'])) {
+            return $this->json(['success' => false, 'message' => 'Titre vide'], 400);
+        }
+
+        // Récupérer la dernière position
+        $lastColonne = $colRepo->findOneBy([], ['position' => 'DESC']);
+        $position = $lastColonne ? $lastColonne->getPosition() + 1 : 1;
+
+        $colonne = new ColonneTrello();
+        $colonne->setTitre($data['titre']);
+        $colonne->setPosition($position);
+
+        $em->persist($colonne);
+        $em->flush();
+
+        return $this->json([
+            'success' => true,
+            'id' => $colonne->getId(),
+            'titre' => $colonne->getTitre()
+        ]);
+    }
+
 }

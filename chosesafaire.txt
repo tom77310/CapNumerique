@@ -38,22 +38,25 @@ Choses a faire
     - Supprimer : (fait)
         - une carte SANS supprimé l'utilisateur associé a la carte (fait)
         - une carte et l'utilisateur associé a la carte (fait)
-    - Modifier le titre de la colonne
-    - Supprimer une colonne
-    - Ajouter une nouvelle colonne
+    - Modifier le titre de la colonne (fait)
+    - Supprimer une colonne (fait)
+    - Ajouter une nouvelle colonne (fait)
+    - Deplacement des colonnes, et sauvegarder les nouvelles positions des colonnes
+    - La nouvelle colonne ajouter doit aller sur la droite de la dernière colonne
 - pages du footer, section " a propos de nous"
     - Mentions légales
     - Politique de confidentialité
     - Conditions générales d'utilisation
 
 
-- Faire en sorte qu'on puisse actualisé la page du trello
 
 - Pages Espace Candidat
     - Infos candidat
         - Modifier
         - Voir le detail
 
+- Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
+- Faire en sorte qu'on puisse actualisé la page du trello
 
 Questions 
 - formulaire de contact utile ?
