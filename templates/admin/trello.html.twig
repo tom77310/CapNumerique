@@ -64,9 +64,8 @@
             <p><strong>Ville :</strong> <span id="modalVille"></span></p>
             <p><strong>Sexe :</strong> <span id="modalSexe"></span></p>
             <p><strong>Date de naissance :</strong> <span id="modalDateNaissance"></span></p>
-            <p><strong>CV :</strong> <span id="modalCv"></span></p>
-            <p><strong>LinkedIn :</strong> <span id="modalLinkedin"></span></p>
-
+            <p><strong>CV :</strong> <a id="modalCv" href="#" download>Télécharger le CV</a></p>
+            <p><strong>LinkedIn :</strong> <a id="modalLinkedin" href="#" target="_blank"></a></p>
             <p><strong>Besoins :</strong></p>
             <ul id="modalBesoins"></ul>
 
@@ -155,8 +154,26 @@
                     document.getElementById('modalVille').textContent = this.dataset.ville;
                     document.getElementById('modalSexe').textContent = this.dataset.sexe;
                     document.getElementById('modalDateNaissance').textContent = this.dataset.datenaissance;
-                    document.getElementById('modalCv').textContent = this.dataset.cv;
-                    document.getElementById('modalLinkedin').textContent = this.dataset.linkedin;
+                    const cvLink = document.getElementById('modalCv');
+                    if (this.dataset.cv) {
+                        cvLink.href = '/utilisateur/admin/trello/download/cv/' + this.dataset.cv;
+                        cvLink.style.display = 'inline';
+                    } else {
+                        cvLink.style.display = 'none';
+                    }
+                    const linkedinLink = document.getElementById('modalLinkedin');
+                    if (this.dataset.linkedin) {
+                        linkedinLink.href = this.dataset.linkedin;
+                        linkedinLink.textContent = this.dataset.linkedin;
+                        linkedinLink.style.display = 'inline';
+                    } else {
+                        linkedinLink.style.display = 'none';
+                    }
+                    let url = this.dataset.linkedin;
+                    if (!url.startsWith('http')) {
+                        url = 'https://' + url;
+                    }
+                    linkedinLink.href = url;
                     document.getElementById('modalDescription').textContent = this.dataset.description;
 
                     // JSON → liste

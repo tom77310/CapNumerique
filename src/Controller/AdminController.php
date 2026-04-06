@@ -53,4 +53,15 @@ final class AdminController extends AbstractController
 
         return $this->json(['success' => true]);
     }
+    #[Route('/trello/download/cv/{filename}', name: 'download_cv')]
+    public function downloadCv(string $filename): Response
+    {
+        $filePath = $this->getParameter('kernel.project_dir') . '/assets/uploads/cv/' . $filename;
+
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException('Fichier non trouvé');
+        }
+
+        return $this->file($filePath, $filename);
+    }
 }

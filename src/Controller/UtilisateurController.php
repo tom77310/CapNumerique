@@ -41,21 +41,26 @@ final class UtilisateurController extends AbstractController
 
             //  Gestion du fichier CV
             $cvFile = $formCandidat->get('CV')->getData();
-
+            $nomCandidat = strtoupper($candidat->getNom()); // On récupere le nom du candidat
+            $prenomCandidat = ucfirst($candidat->getPrenom()); // On récupère le prenom du candidat
+            $dateupload = (new \DateTime())->format('d-m-Y'); // Date d'upload format j/m/a
             if ($cvFile) {
-                $newFilename = uniqid() . '.' . $cvFile->guessExtension();
+                $nomFichier = 'CV -' . $nomCandidat . '_' . $prenomCandidat . '_' . $dateupload;
+
+                $extension = $cvFile->guessExtension();
+                $nomfichierComplet = $nomFichier . '.' . $extension;
 
                 try {
                     $cvFile->move(
                         $this->getParameter('cv_directory'),
-                        $newFilename
+                        $nomfichierComplet
                     );
                 } catch (\Exception $e) {
                     $this->addFlash('error', 'Erreur lors de l\'upload du CV');
                 }
 
                 // On enregistre le nom du fichier en base
-                $candidat->setCV($newFilename);
+                $candidat->setCV($nomfichierComplet);
             }
 
             //  Sauvegarde en base

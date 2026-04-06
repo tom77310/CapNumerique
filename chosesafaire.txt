@@ -30,7 +30,11 @@ Choses a faire
 - Trello V2
     - le lier aux utilisateurs, uniquement candidats (fait)
     - Voir le detail de la carte, peut être en clickant dessus comme dans trello (fait)
-
+06/04/2026
+    - cv téléchargable depuis la carte du trello (fait)
+    - lien linkedin clickable (fait)
+    - Renommer le cv format : (fait)
+    - CV - (nom candidat) _ (prenom candidat) - (date upload) (fait)
     - Supprimer une carte 
     - Modifier une carte
     - Modifier le titre de la colonne
@@ -42,10 +46,12 @@ Choses a faire
     - Conditions générales d'utilisation
 
 
-
-
 - Faire en sorte qu'on puisse actualisé la page du trello
 
+- Pages Espace Candidat
+    - Infos candidat
+        - Modifier
+        - Voir le detail
 
 
 Questions 
