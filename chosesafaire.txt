@@ -41,13 +41,13 @@ Choses a faire
     - Modifier le titre de la colonne (fait)
     - Supprimer une colonne (fait)
     - Ajouter une nouvelle colonne (fait)
-    - Deplacement des colonnes, et sauvegarder les nouvelles positions des colonnes
-    - La nouvelle colonne ajouter doit aller sur la droite de la dernière colonne
+    - Deplacement des colonnes, et sauvegarder les nouvelles positions des colonnes (fait)
+    - La nouvelle colonne ajouter doit aller en bas a gauche, en dessous de la première colonne (fait)
+
 - pages du footer, section " a propos de nous"
     - Mentions légales
     - Politique de confidentialité
     - Conditions générales d'utilisation
-
 
 
 - Pages Espace Candidat

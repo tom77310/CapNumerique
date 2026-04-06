@@ -175,4 +175,26 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    // Sauvegarde de la positions des colonnes
+    #[Route('/trello/update-position-colonnes', name: 'update_position_colonnes', methods: ['POST'])]
+    public function updatePositionColonnes(Request $request, EntityManagerInterface $em, ColonneTrelloRepository $colRepo)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['positions'])) {
+            return $this->json(['success' => false], 400);
+        }
+
+        foreach ($data['positions'] as $pos) {
+            $colonne = $colRepo->find($pos['colonneId']);
+            if ($colonne) {
+                $colonne->setPosition($pos['position']);
+            }
+        }
+
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
 }

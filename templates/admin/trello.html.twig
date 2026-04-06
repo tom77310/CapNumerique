@@ -9,9 +9,9 @@
             <input type="text" id="newColonneTitre" class="form-control d-inline-block w-25" placeholder="Nom de la colonne">
             <button id="addColonneBtn" class="btn btn-success ms-2">Ajouter une colonne</button>
         </div>
-        <div class="row">
+        <div class="row" id="columns-container">
             {% for colonne in colonnes %}
-                <div class="col-md-4">
+                <div class="col-md-4 mt-4 mb-4 colonne-item" data-colonne-id="{{ colonne.id }}">
                     <div class="card">
                         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <span class="colonne-titre">{{ colonne.titre }}</span>
@@ -143,6 +143,41 @@
                 }
             });
         });
+
+        // =========================
+        // DRAG & DROP COLONNES
+        // =========================
+        const container = document.getElementById('columns-container');
+
+        new Sortable(container, {
+            animation: 150,
+            draggable: '.colonne-item',
+            ghostClass: 'bg-light',
+            onStart: function(evt) {
+                    evt.item.style.cursor = 'grabbing';
+                },
+            onEnd: function () {
+
+                const colonnes = Array.from(container.querySelectorAll('.colonne-item'));
+
+                const positions = colonnes.map((col, index) => ({
+                    colonneId: col.dataset.colonneId,
+                    position: index + 1
+                }));
+
+                fetch('{{ path("update_position_colonnes") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        positions: positions
+                    })
+                });
+            }
+        });
+
 
         const allCards = document.querySelectorAll('.card-item');
         allCards.forEach(carte => {
@@ -354,7 +389,7 @@
 
                     // Création HTML de la nouvelle colonne
                     const newCol = document.createElement('div');
-                    newCol.className = 'col-md-4';
+                    newCol.className = 'col-md-4 mt-4 mb-4';
                     newCol.innerHTML = `
                         <div class="card">
                             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
