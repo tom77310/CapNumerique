@@ -35,8 +35,9 @@ Choses a faire
     - lien linkedin clickable (fait)
     - Renommer le cv format : (fait)
     - CV - (nom candidat) _ (prenom candidat) - (date upload) (fait)
-    - Supprimer une carte 
-    - Modifier une carte
+    - Supprimer : (fait)
+        - une carte SANS supprimé l'utilisateur associé a la carte (fait)
+        - une carte et l'utilisateur associé a la carte (fait)
     - Modifier le titre de la colonne
     - Supprimer une colonne
     - Ajouter une nouvelle colonne

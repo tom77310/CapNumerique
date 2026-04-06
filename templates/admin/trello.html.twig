@@ -13,13 +13,14 @@
                         <div class="card-header bg-primary text-white">
                             {{ colonne.titre }}
                         </div>
-
+                        {# Ne pas supprimer "data-carte-id", car il permet de sauvegarder la positions des cartes et de les deplacer #}
                         <ul class="list-group list-group-flush cards" data-colonne-id="{{ colonne.id }}">
                             {% set cartes = colonne.colonne|sort((a, b) => a.position <=> b.position) %}
                             {% if cartes|length > 0 %}
                                 {% for carte in cartes %}
                                     <li class="list-group-item card-item"
                                         data-carte-id="{{ carte.id }}"
+                                        data-user-id="{{ carte.utilisateur.id }}"
                                         data-nom="{{ carte.utilisateur.nom }}"
                                         data-prenom="{{ carte.utilisateur.prenom }}"
                                         data-email="{{ carte.utilisateur.email }}"
@@ -76,132 +77,182 @@
             <p id="modalDescription"></p>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-danger" disabled>Supprimer</button>
-            <button class="btn btn-primary" disabled>Modifier</button>
+            <button id="deleteCardOnly" class="btn btn-warning">Supprimer la carte uniquement</button>
+            <button id="deleteUserAndCard" class="btn btn-danger">Supprimer la carte et l'utilisateur</button>
             <button class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- SortableJS -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const lists = document.querySelectorAll('.cards');
+    document.addEventListener('DOMContentLoaded', () => {
+        const lists = document.querySelectorAll('.cards');
 
-            lists.forEach(list => {
-                new Sortable(list, {
-                    group: 'shared',
-                    animation: 150,
-                    onStart: function(evt) {
-                        evt.item.style.cursor = 'grabbing';
-                    },
-                    onEnd: function (evt) {
-                        const colonne = evt.to;
-                        const colonneId = colonne.dataset.colonneId;
+        // VARIABLES POUR SUPPRESSION
+        let currentCarteId = null;
+        let currentUserId = null;
 
-                        const cartes = Array.from(colonne.querySelectorAll('.card-item'));
+        lists.forEach(list => {
+            new Sortable(list, {
+                group: 'shared',
+                animation: 150,
+                onStart: function(evt) {
+                    evt.item.style.cursor = 'grabbing';
+                },
+                onEnd: function (evt) {
+                    const colonne = evt.to;
+                    const colonneId = colonne.dataset.colonneId;
 
-                        const positions = cartes.map((carte, index) => ({
-                            carteId: carte.dataset.carteId,
-                            position: index + 1
-                        }));
+                    const cartes = Array.from(colonne.querySelectorAll('.card-item'));
 
-                        fetch('/utilisateur/admin/trello/deplacement-carte', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': '{{ csrf_token("Admin_deplacementcartetrello") }}'
-                            },
-                            body: JSON.stringify({
-                                colonneId: colonneId,
-                                positions: positions
-                            })
-                        });
+                    const positions = cartes.map((carte, index) => ({
+                        carteId: carte.dataset.carteId,
+                        position: index + 1
+                    }));
 
-                        const noCard = colonne.querySelector('.no-card');
-                        if (cartes.length === 0) {
-                            noCard.style.display = 'block';
-                        } else {
-                            noCard.style.display = 'none';
-                        }
-
-                        evt.item.style.cursor = 'grab';
-                    }
-                });
-            });
-
-            const allCards = document.querySelectorAll('.card-item');
-            allCards.forEach(carte => {
-                carte.style.cursor = 'grab';
-            });
-
-            // CLIC SUR CARTE → MODAL
-            allCards.forEach(carte => {
-                carte.addEventListener('click', function () {
-
-                    document.getElementById('modalNom').textContent = this.dataset.nom;
-                    document.getElementById('modalPrenom').textContent = this.dataset.prenom;
-                    document.getElementById('modalEmail').textContent = this.dataset.email;
-                    document.getElementById('modalTelephone').textContent = this.dataset.telephone;
-                    document.getElementById('modalPays').textContent = this.dataset.pays;
-                    document.getElementById('modalVille').textContent = this.dataset.ville;
-                    document.getElementById('modalSexe').textContent = this.dataset.sexe;
-                    document.getElementById('modalDateNaissance').textContent = this.dataset.datenaissance;
-                    const cvLink = document.getElementById('modalCv');
-                    if (this.dataset.cv) {
-                        cvLink.href = '/utilisateur/admin/trello/download/cv/' + this.dataset.cv;
-                        cvLink.style.display = 'inline';
-                    } else {
-                        cvLink.style.display = 'none';
-                    }
-                    const linkedinLink = document.getElementById('modalLinkedin');
-                    if (this.dataset.linkedin) {
-                        linkedinLink.href = this.dataset.linkedin;
-                        linkedinLink.textContent = this.dataset.linkedin;
-                        linkedinLink.style.display = 'inline';
-                    } else {
-                        linkedinLink.style.display = 'none';
-                    }
-                    let url = this.dataset.linkedin;
-                    if (!url.startsWith('http')) {
-                        url = 'https://' + url;
-                    }
-                    linkedinLink.href = url;
-                    document.getElementById('modalDescription').textContent = this.dataset.description;
-
-                    // JSON → liste
-                    const besoins = JSON.parse(this.dataset.besoins || "[]");
-                    const recherche = JSON.parse(this.dataset.recherche || "[]");
-
-                    const besoinsList = document.getElementById('modalBesoins');
-                    const rechercheList = document.getElementById('modalRecherche');
-
-                    besoinsList.innerHTML = "";
-                    rechercheList.innerHTML = "";
-
-                    besoins.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        besoinsList.appendChild(li);
+                    fetch('{{ path("Admin_deplacementcartetrello")}}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': '{{ csrf_token("Admin_deplacementcartetrello") }}'
+                        },
+                        body: JSON.stringify({
+                            colonneId: colonneId,
+                            positions: positions
+                        })
                     });
 
-                    recherche.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        rechercheList.appendChild(li);
-                    });
+                    const noCard = colonne.querySelector('.no-card');
+                    if (cartes.length === 0) {
+                        noCard.style.display = 'block';
+                    } else {
+                        noCard.style.display = 'none';
+                    }
 
-                    const modal = new bootstrap.Modal(document.getElementById('userModal'));
-                    modal.show();
-                });
+                    evt.item.style.cursor = 'grab';
+                }
             });
         });
-    </script>
+
+        const allCards = document.querySelectorAll('.card-item');
+        allCards.forEach(carte => {
+            carte.style.cursor = 'grab';
+        });
+
+        // CLIC SUR CARTE → MODAL
+        allCards.forEach(carte => {
+            carte.addEventListener('click', function () {
+
+                // STOCKAGE DES IDS POUR SUPPRESSION
+                currentCarteId = this.dataset.carteId;
+                currentUserId = this.dataset.userId;
+
+                document.getElementById('modalNom').textContent = this.dataset.nom;
+                document.getElementById('modalPrenom').textContent = this.dataset.prenom;
+                document.getElementById('modalEmail').textContent = this.dataset.email;
+                document.getElementById('modalTelephone').textContent = this.dataset.telephone;
+                document.getElementById('modalPays').textContent = this.dataset.pays;
+                document.getElementById('modalVille').textContent = this.dataset.ville;
+                document.getElementById('modalSexe').textContent = this.dataset.sexe;
+                document.getElementById('modalDateNaissance').textContent = this.dataset.datenaissance;
+
+                const cvLink = document.getElementById('modalCv');
+                if (this.dataset.cv) {
+                    cvLink.href = '/utilisateur/admin/trello/download/cv/' + this.dataset.cv;
+                    cvLink.style.display = 'inline';
+                } else {
+                    cvLink.style.display = 'none';
+                }
+
+                const linkedinLink = document.getElementById('modalLinkedin');
+                if (this.dataset.linkedin) {
+                    linkedinLink.href = this.dataset.linkedin;
+                    linkedinLink.textContent = this.dataset.linkedin;
+                    linkedinLink.style.display = 'inline';
+                } else {
+                    linkedinLink.style.display = 'none';
+                }
+
+                let url = this.dataset.linkedin;
+                if (!url.startsWith('http')) {
+                    url = 'https://' + url;
+                }
+                linkedinLink.href = url;
+
+                document.getElementById('modalDescription').textContent = this.dataset.description;
+
+                // JSON → liste
+                const besoins = JSON.parse(this.dataset.besoins || "[]");
+                const recherche = JSON.parse(this.dataset.recherche || "[]");
+
+                const besoinsList = document.getElementById('modalBesoins');
+                const rechercheList = document.getElementById('modalRecherche');
+
+                besoinsList.innerHTML = "";
+                rechercheList.innerHTML = "";
+
+                besoins.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    besoinsList.appendChild(li);
+                });
+
+                recherche.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    rechercheList.appendChild(li);
+                });
+
+                const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                modal.show();
+            });
+        });
+
+        // =========================
+        // SUPPRESSION CARTE UNIQUEMENT
+        // =========================
+        document.getElementById('deleteCardOnly').addEventListener('click', function () {
+
+            if (!confirm('Supprimer cette carte ?')) return;
+
+            fetch('/utilisateur/admin/trello/delete-card', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    carteId: currentCarteId
+                })
+            })
+            .then(() => location.reload());
+        });
+
+        // =========================
+        // SUPPRESSION USER + CARTE
+        // =========================
+        document.getElementById('deleteUserAndCard').addEventListener('click', function () {
+
+            if (!confirm('Supprimer cet utilisateur ET la carte ?')) return;
+
+            fetch('/utilisateur/admin/trello/delete-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    userId: currentUserId
+                })
+            })
+            .then(() => location.reload());
+        });
+
+    });
+</script>
 {% endblock %}

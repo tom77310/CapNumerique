@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\CarteTrelloRepository;
 use App\Repository\ColonneTrelloRepository;
+use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,5 +64,44 @@ final class AdminController extends AbstractController
         }
 
         return $this->file($filePath, $filename);
+    }
+
+    // Supprimer uniquement la carte
+    #[Route('/trello/delete-card', name: 'delete_card', methods: ['POST'])]
+    public function deleteCard(Request $request, EntityManagerInterface $em, CarteTrelloRepository $carteRepo)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $carte = $carteRepo->find($data['carteId']);
+
+        if ($carte) {
+            $em->remove($carte);
+            $em->flush();
+        }
+
+        return $this->json(['success' => true]);
+    }
+
+    // Supprimer Carte et utilisateur associé
+    #[Route('/trello/delete-user', name: 'delete_user', methods: ['POST'])]
+    public function deleteUser(Request $request, EntityManagerInterface $em, UtilisateurRepository $userRepo, CarteTrelloRepository $carteRepo)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $user = $userRepo->find($data['userId']);
+
+        if ($user) {
+            // Supprime toutes les cartes de cet utilisateur
+            $cartes = $carteRepo->findBy(['utilisateur' => $user]);
+            foreach ($cartes as $carte) {
+                $em->remove($carte);
+            }
+
+            // Supprime l'utilisateur
+            $em->remove($user);
+            $em->flush();
+        }
+
+        return $this->json(['success' => true]);
     }
 }
