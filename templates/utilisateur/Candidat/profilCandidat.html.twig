@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Profil Candidat {% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 text-decoration-underline">Mon profil condidat</h1>
+
+        <div class="card shadow p-4">
+            <div class="col-md-6">
+                <strong>Votre genre :</strong>
+                <p>{{candidat.sexe}}</p>
+            </div>
+            <div class="col-md-6">
+                <strong>Nom de famille </strong>
+                <p>{{candidat.nom}}</p>
+            </div>
+            <div class="col-md-6">
+                <strong>Prenom</strong>
+                <p>{{candidat.prenom}}</p>
+            </div>
+            <div class="col-md-6">
+                <strong>Numéro de téléphone </strong>
+                <p>{{candidat.telephone}}</p>
+            </div>
+            <div class="col-md-6">
+                <strong>Votre adresse email :</strong>
+                <p>{{candidat.email}}</p>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Votre date de naissance :</strong>
+                    <p>
+                        {{ candidat.datedenaissance ? candidat.datedenaissance|date('d/m/Y') : 'Date de naissance non renseignée'}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Votre Pays de résidence :</strong>
+                    <p>{{candidat.pays}}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Votre Ville de résidence :</strong>
+                    <p>
+                        {{ candidat.ville }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <strong>Votre dernier CV envoyé :</strong>
+                    <p>
+                        {% if candidat.cv %}
+                            <a href="{{ asset('uploads/cv/' ~ candidat.cv) }}" target="_blank">
+                                {{ candidat.cv }}
+                            </a>
+                        {% else %}
+                            Aucun CV envoyé
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <strong>Lien linkedin</strong>
+                    <p>
+                        {% if candidat.linkedin %}
+                            <a href="{{ candidat.linkedin }}" target="_blank">
+                                Voir le lien linkedin
+                            </a>
+                            {% else %}
+                                Lien linkedin non renseigné
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Vos besoins séléctionné</strong>
+                    <ul>
+                        {% for besoin in candidat.besoin %}
+                            <li>{{ besoin }}</li>
+                        {% else %}
+                            <li>Aucuns besoins renseignés</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Votre Recherche :</strong>
+                    <ul>
+                        {% for recherche in candidat.recherche %}
+                            <li>
+                                {{ recherche }}
+                            </li>
+                            {% else %}
+                                <li>Aucune recherche renseignée </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <strong>Description</strong>
+                    <p> {{ candidat.description ? candidat.description : "Aucune description" }} </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

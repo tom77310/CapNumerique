@@ -112,6 +112,20 @@ final class UtilisateurController extends AbstractController
     {
         return $this->render('utilisateur/Candidat/espaceCandidat.html.twig');
     }
+    // Profil candidat
+    #[Route('/espaceCandidat/profil', name: 'Utilisateur_ProfilCandidat')]
+    public function profilCandidat(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_CANDIDAT'); // Autorise uniquement les utilisateurs avec le role ROLE_CANDIDAT
+        $candidat = $this->getUser();
+
+        return $this->render('utilisateur/Candidat/profilCandidat.html.twig', [
+            'candidat' => $candidat,
+        ]);
+    }
+
+
+
     #[Route('/espaceEntreprise', name: 'Utilisateur_espaceEntreprise')]
     public function espaceEntreprise(): Response
     {
