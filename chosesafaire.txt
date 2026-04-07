@@ -43,25 +43,31 @@ Choses a faire
     - Supprimer une colonne (fait)
     - Ajouter une nouvelle colonne (fait)
     - Deplacement des colonnes, et sauvegarder les nouvelles positions des colonnes (fait)
-    - La nouvelle colonne ajouter doit aller en bas a gauche, en dessous de la première colonne (fait)
 
 07/04/2026
 - pages du footer, section " a propos de nous" (fait)
     - Mentions légales (fait)
     - Politique de confidentialité (fait)
     - Conditions générales d'utilisation (fait)
-
+- Point du 07/04/26
+    - modifier le trello 
+        - faire en sorte que les colonnes soient alignées a droite a l'ajout d'une colonne (fait)
+        - Affiché le nom, prenom et besoin/recherche de l'utilisateur sur la "carte"
+        - Remplacé "modifier le nom" et "supprimé la carte" par des icones ou un menu deroulant "option" avec des qu'on clik les deux options apparraissent
 - Pages Espace Candidat
     - Infos candidat
-        - Modifier
         - Voir le detail
+        - Modifier les infos sauf mdp
+        - modifier le mdp
+        - supprimer compte 
+
 
 
 - Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page
 
 - Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
 - Faire en sorte qu'on puisse actualisé la page du trello
-    - Des que je m'inscris, une carte trello est créer avec les infos utilisateur, et elle ensuite ajouter dans le tableau trello
+    - Des que je m'inscris, une carte trello est créer avec les infos utilisateur, et elle est ensuite ajouter dans le tableau trello
 
 Questions 
 - formulaire de contact utile ?

@@ -3,23 +3,24 @@
 {% block title %} Gestion Candidat - Admin {% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
+    <div class="containe-fluid mt-4">
         <h1 class="mb-4 text-center">Gestion des candidats</h1>
         <div class="mb-4 text-center">
             <input type="text" id="newColonneTitre" class="form-control d-inline-block w-25" placeholder="Nom de la colonne">
             <button id="addColonneBtn" class="btn btn-success ms-2">Ajouter une colonne</button>
         </div>
-        <div class="row" id="columns-container">
-            {% for colonne in colonnes %}
-                <div class="col-md-4 mt-4 mb-4 colonne-item" data-colonne-id="{{ colonne.id }}">
-                    <div class="card">
+        <div id="columns-wrapper" style="overflow-x: auto;">
+            <div id="columns-container" class="d-flex flex-row mt-4" style="min-width: max-content; height: 70vh;"> 
+                {% for colonne in colonnes %}
+                <div class="colonne-item me-3" style="min-width:300px; height: 100%;" data-colonne-id="{{ colonne.id }}">
+                    <div class="card h-100 d-flex flex-column">
                         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <span class="colonne-titre">{{ colonne.titre }}</span>
                             <button class="btn btn-sm btn-light edit-colonne-btn" data-colonne-id="{{ colonne.id }}">Modifier le nom</button>
                             <button class="btn btn-sm btn-danger delete-colonne-btn" data-colonne-id="{{ colonne.id }}">Supprimer la colonne</button>
                         </div>
                         {# Ne pas supprimer "data-carte-id", car il permet de sauvegarder la positions des cartes et de les deplacer #}      
-                        <ul class="list-group list-group-flush cards" data-colonne-id="{{ colonne.id }}">
+                        <ul class="list-group list-group-flush cards flex-grow-1" data-colonne-id="{{ colonne.id }}">
                             {% set cartes = colonne.colonne|sort((a, b) => a.position <=> b.position) %}
                             {% if cartes|length > 0 %}
                                 {% for carte in cartes %}
@@ -49,7 +50,8 @@
                         </ul>
                     </div>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 
@@ -338,7 +340,7 @@
                 if (!confirm('Supprimer cette colonne et toutes ses cartes ?')) return;
 
                 const colonneId = e.target.dataset.colonneId;
-                const colonneElement = e.target.closest('.col-md-4');
+                const colonneElement = e.target.closest('.colonne-item');
 
                 fetch('{{ path("delete_colonne") }}', {
                     method: 'POST',
@@ -389,22 +391,24 @@
 
                     // Création HTML de la nouvelle colonne
                     const newCol = document.createElement('div');
-                    newCol.className = 'col-md-4 mt-4 mb-4';
+                    newCol.className = 'colonne-item me-3';
+                    newCol.style.minWidth = '300px';
+                    newCol.style.height = '100%';
                     newCol.innerHTML = `
-                        <div class="card">
+                        <div class="card h-100 d-flex flex-column">
                             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                 <span class="colonne-titre">${data.titre}</span>
                                 <button class="btn btn-sm btn-light edit-colonne-btn" data-colonne-id="${data.id}">Modifier le nom</button>
                                 <button class="btn btn-sm btn-danger delete-colonne-btn" data-colonne-id="${data.id}">Supprimer la colonne</button>
                             </div>
-                            <ul class="list-group list-group-flush cards" data-colonne-id="${data.id}">
+                            <ul class="list-group list-group-flush cards flex-grow-1" data-colonne-id="${data.id}">
                                 <li class="list-group-item text-muted no-card">Aucune carte</li>
                             </ul>
                         </div>
                     `;
 
                     // Ajouter à la ligne des colonnes
-                    document.querySelector('.row').appendChild(newCol);
+                    document.getElementById('columns-container').appendChild(newCol);
 
                     // Pour que les cartes dans la nouvelle colonne soit deplacable
                     const newList = newCol.querySelector('.cards');
