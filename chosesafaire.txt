@@ -1,25 +1,34 @@
 Choses a faire 
-- Créer la base de données (fait)
-- Créer la table "utilisateur" (fait)
+
+23/04/2026
+- Créer la base de données avec la table utilisateurs (fait)
+
+24/04/2026
 - Créer la barre de nav pour le contact (fait)
 - Créer la barre de nav (fait)
 - Créer le footer (fait)
-- Faire fonctionner inscription/connexion (fait)
-- Formulaire de connexion (fait)
+
 
 30/03/26
+- Faire fonctionner inscription/connexion (fait)
 - Formulaire d'inscription Candidat (fait)
-- Page de "transition" pour les differents formulaires candidat ou entreprise. (fait)
 - Formulaire d'inscription Entreprise (fait)
+- Formulaire de connexion (fait)
+- Page de "transition" pour les differents formulaires candidat ou entreprise. (fait)
 
 01/04/26
 - Accueil Page espace candidat (fait)
 - Accueil Page espace entreprise (fait)
 - Accueil Page espace admin (fait)
 - Refaire Page Connexion (fait)
-- tableau "trello" admin V1 (fait)
-- page gestion candidat (fait)
+- tableau "trello" admin V1 dans la page Gestion des Candidats (fait)
+    - creation des entité "CarteTrello" et "ColonneTrello" (fait)
+    - Faire en sorte qu'on puisse deplacer les cartes d'une colonne a l'autre (fait)
+    - Faire en sorte que la position soit sauvegarder (fait)
+    - Pour le moment, les données sont ajouter dans la table "CarteTrello" (fait)
+    - Ajout d’un controller de test, afin d’ajouter des données de test (fait)
 - rajouter un lien de retour dans les formulaires d'inscription (fait)
+
 
 02/04/26
 - faire la difference demandé dans le formulaire inscription candidat voir video (fait)
@@ -52,8 +61,14 @@ Choses a faire
 - Point du 07/04/26
     - modifier le trello 
         - faire en sorte que les colonnes soient alignées a droite a l'ajout d'une colonne (fait)
-        - Affiché le nom, prenom et besoin/recherche de l'utilisateur sur la "carte"
+
+08/04/26
+    - Trello V3
+        - Affiché le nom, prenom et besoin/recherche de l'utilisateur sur la "carte" (fait)
+        - Faire en sorte que si les cartes depassent de la colonne, un scroll vertical apparrait. Ce qui fait que les cartes restent dans la colonnes. (fait)
         - Remplacé "modifier le nom" et "supprimé la carte" par des icones ou un menu deroulant "option" avec des qu'on clik les deux options apparraissent
+        - Faire en sorte qu'on puisse actualisé la page du trello
+        - Des que je m'inscris, une carte trello est créer avec les infos utilisateur, et elle est ensuite ajouter dans le tableau trello
 - Pages Espace Candidat
     - Infos candidat
         - Voir le detail
@@ -66,8 +81,6 @@ Choses a faire
 - Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page
 
 - Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
-- Faire en sorte qu'on puisse actualisé la page du trello
-    - Des que je m'inscris, une carte trello est créer avec les infos utilisateur, et elle est ensuite ajouter dans le tableau trello
 
 Questions 
 - formulaire de contact utile ?

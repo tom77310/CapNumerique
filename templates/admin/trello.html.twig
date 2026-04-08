@@ -20,7 +20,9 @@
                             <button class="btn btn-sm btn-danger delete-colonne-btn" data-colonne-id="{{ colonne.id }}">Supprimer la colonne</button>
                         </div>
                         {# Ne pas supprimer "data-carte-id", car il permet de sauvegarder la positions des cartes et de les deplacer #}      
-                        <ul class="list-group list-group-flush cards flex-grow-1" data-colonne-id="{{ colonne.id }}">
+                        <ul class="list-group list-group-flush cards flex-grow-1 overflow-auto" 
+                            data-colonne-id="{{ colonne.id }}"
+                            style="max-height: 100%;">
                             {% set cartes = colonne.colonne|sort((a, b) => a.position <=> b.position) %}
                             {% if cartes|length > 0 %}
                                 {% for carte in cartes %}
@@ -40,7 +42,31 @@
                                         data-besoins='{{ carte.utilisateur.besoin|json_encode }}'
                                         data-recherche='{{ carte.utilisateur.recherche|json_encode }}'
                                         data-description="{{ carte.utilisateur.description }}">
-                                        {{ carte.utilisateur.nom }}
+
+                                        {# Ce qui est affiché sur la carte #}
+                                        <strong class="d-block mb-1">
+                                            {{ carte.utilisateur.nom }} {{ carte.utilisateur.prenom }}
+                                        </strong>
+                                        {% if carte.utilisateur.besoin is not empty %}
+                                            <h6>Besoin :</h6>
+                                            <ul class="mb-1 ps-3">
+                                                {% for besoin in carte.utilisateur.besoin %}
+                                                    <li class="small text-dark">
+                                                        {{ besoin }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                        {% if carte.utilisateur.recherche is not empty %}
+                                            <h6>Recherche :</h6>
+                                            <ul class="mb-0 ps-3">
+                                                {% for recherche in carte.utilisateur.recherche %}
+                                                    <li class="small text-muted">
+                                                        {{ recherche }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
                                     </li>
                                 {% endfor %}
                                 <li class="list-group-item text-muted no-card" style="display:none;">Aucune carte</li>
@@ -280,7 +306,7 @@
         // =========================
         document.getElementById('deleteUserAndCard').addEventListener('click', function () {
 
-            if (!confirm('Supprimer cet utilisateur ET la carte ?')) return;
+            if (!confirm('ATTENTION ! Vous allez supprimer la carte ET l\'utilisateur associé ! Êtes vous sûr de continuer ?')) return;
 
             fetch('/utilisateur/admin/trello/delete-user', {
                 method: 'POST',
