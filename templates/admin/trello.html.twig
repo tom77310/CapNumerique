@@ -14,10 +14,16 @@
                 {% for colonne in colonnes %}
                 <div class="colonne-item me-3" style="min-width:300px; height: 100%;" data-colonne-id="{{ colonne.id }}">
                     <div class="card h-100 d-flex flex-column">
-                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">    
                             <span class="colonne-titre">{{ colonne.titre }}</span>
-                            <button class="btn btn-sm btn-light edit-colonne-btn" data-colonne-id="{{ colonne.id }}">Modifier le nom</button>
-                            <button class="btn btn-sm btn-danger delete-colonne-btn" data-colonne-id="{{ colonne.id }}">Supprimer la colonne</button>
+                            <div class="d-flex align-items-center gap-1">
+                                <button class="btn btn-sm btn-light edit-colonne-btn p-1" data-colonne-id="{{ colonne.id }}" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-colonne-btn p-1" data-colonne-id="{{ colonne.id }}" title="Supprimer">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
                         </div>
                         {# Ne pas supprimer "data-carte-id", car il permet de sauvegarder la positions des cartes et de les deplacer #}      
                         <ul class="list-group list-group-flush cards flex-grow-1 overflow-auto" 
@@ -323,10 +329,11 @@
 
         // Modifier le nom de la colonne
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('edit-colonne-btn')) {
+            const editBtn = e.target.closest('.edit-colonne-btn');
+            if (editBtn) {
 
-                const colonneId = e.target.dataset.colonneId;
-                const header = e.target.closest('.card-header');
+                const colonneId = editBtn.dataset.colonneId;
+                const header = editBtn.closest('.card-header');
                 const titreElement = header.querySelector('.colonne-titre');
 
                 const titreActuel = titreElement.textContent;
@@ -352,7 +359,6 @@
                     }
                 });
             }
-
         });
 
         // =========================
@@ -360,31 +366,42 @@
         // =========================
         document.addEventListener('click', function(e) {
 
-            // SUPPRESSION COLONNE
-            if (e.target.classList.contains('delete-colonne-btn')) {
+            const deleteBtn = e.target.closest('.delete-colonne-btn');
+            if (!deleteBtn) return;
 
-                if (!confirm('Supprimer cette colonne et toutes ses cartes ?')) return;
+            if (!confirm('Supprimer cette colonne et toutes ses cartes ?')) return;
 
-                const colonneId = e.target.dataset.colonneId;
-                const colonneElement = e.target.closest('.colonne-item');
+            const colonneId = deleteBtn.dataset.colonneId;
 
-                fetch('{{ path("delete_colonne") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        colonneId: colonneId
-                    })
+            // IMPORTANT : on cible uniquement le vrai conteneur colonne
+            const colonneElement = deleteBtn.closest('.colonne-item');
+
+            fetch('{{ path("delete_colonne") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    colonneId: colonneId
                 })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+
+                    // Suppression immédiate dans le DOM
+                    if (colonneElement) {
                         colonneElement.remove();
                     }
-                });
-            }
+
+                } else {
+                    alert('Erreur lors de la suppression');
+                }
+            })
+            .catch(() => {
+                alert('Erreur serveur');
+            });
 
         });
 
@@ -422,10 +439,16 @@
                     newCol.style.height = '100%';
                     newCol.innerHTML = `
                         <div class="card h-100 d-flex flex-column">
-                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">    
                                 <span class="colonne-titre">${data.titre}</span>
-                                <button class="btn btn-sm btn-light edit-colonne-btn" data-colonne-id="${data.id}">Modifier le nom</button>
-                                <button class="btn btn-sm btn-danger delete-colonne-btn" data-colonne-id="${data.id}">Supprimer la colonne</button>
+                                <div class="d-flex align-items-center gap-1">
+                                    <button class="btn btn-sm btn-light edit-colonne-btn p-1" data-colonne-id="${data.id}" title="Modifier">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger delete-colonne-btn p-1" data-colonne-id="${data.id}" title="Supprimer">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
                             </div>
                             <ul class="list-group list-group-flush cards flex-grow-1" data-colonne-id="${data.id}">
                                 <li class="list-group-item text-muted no-card">Aucune carte</li>

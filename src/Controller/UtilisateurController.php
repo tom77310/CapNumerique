@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\CarteTrello;
 use App\Entity\Utilisateur;
 use App\Form\FormCandidatType;
 use App\Form\FormEntrepriseType;
+use App\Repository\CarteTrelloRepository;
 use App\Repository\ColonneTrelloRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +25,7 @@ final class UtilisateurController extends AbstractController
     }
 
     #[Route('/inscriptionCandidat', name: 'Utilisateur_inscriptioncandidat')]
-    public function inscriptionCandidat(Request $request,EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher): Response 
+    public function inscriptionCandidat(Request $request,EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher, ColonneTrelloRepository $colRepo, CarteTrelloRepository $carteTrelloRepo): Response 
     {
         // Creation d'un nouvel utilisateur
         $candidat = new Utilisateur;
@@ -66,6 +68,40 @@ final class UtilisateurController extends AbstractController
             //  Sauvegarde en base
             $entityManager->persist($candidat);
             $entityManager->flush();
+
+            // Creation de carte a l'inscription
+            // 🔹 Récupérer la colonne "A Faire"
+            $colonne = $colRepo->findOneBy(['titre' => 'A Faire']);
+
+            if ($colonne) {
+
+                // ❗ Anti doublon (sécurité)
+                $existe = $carteTrelloRepo->findOneBy(['utilisateur' => $candidat]);
+
+                if (!$existe) {
+
+                    // 🔹 Récupérer la dernière position
+                    $dernieresCartes = $carteTrelloRepo->findBy(
+                        ['colonne' => $colonne],
+                        ['position' => 'DESC'],
+                        1
+                    );
+
+                    $position = $dernieresCartes
+                        ? $dernieresCartes[0]->getPosition() + 1
+                        : 1;
+
+                    // 🔹 Création de la carte
+                    $carte = new CarteTrello();
+                    $carte->setTitre('Carte');
+                    $carte->setUtilisateur($candidat);
+                    $carte->setColonne($colonne);
+                    $carte->setPosition($position);
+
+                    $entityManager->persist($carte);
+                    $entityManager->flush();
+                }
+            }
 
             //  Message succès
             $this->addFlash('success', 'Votre compte a bien été créé !');

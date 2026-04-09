@@ -66,9 +66,10 @@ Choses a faire
     - Trello V3
         - Affiché le nom, prenom et besoin/recherche de l'utilisateur sur la "carte" (fait)
         - Faire en sorte que si les cartes depassent de la colonne, un scroll vertical apparrait. Ce qui fait que les cartes restent dans la colonnes. (fait)
-        - Remplacé "modifier le nom" et "supprimé la carte" par des icones ou un menu deroulant "option" avec des qu'on clik les deux options apparraissent
-        - Faire en sorte qu'on puisse actualisé la page du trello
-        - Des que je m'inscris, une carte trello est créer avec les infos utilisateur, et elle est ensuite ajouter dans le tableau trello
+09/04/26
+        - Remplacé "modifier le nom" et "supprimé la carte" par des icones (fait)
+        - Des que je m'inscris, une carte trello est créer avec les infos utilisateur, et elle est ensuite ajouter dans le tableau trello (fait)
+10/04/26
 - Pages Espace Candidat
     - Infos candidat
         - Voir le detail
