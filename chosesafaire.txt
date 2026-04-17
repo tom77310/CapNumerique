@@ -1,13 +1,15 @@
 Choses a faire 
 
-23/04/2026
+03/03/2026
 - Créer la base de données avec la table utilisateurs (fait)
 
-24/04/2026
+Du 04 au 22/03/2026
+- Faire la maquette du site
+
+27/03/2026
 - Créer la barre de nav pour le contact (fait)
 - Créer la barre de nav (fait)
 - Créer le footer (fait)
-
 
 30/03/26
 - Faire fonctionner inscription/connexion (fait)
@@ -74,21 +76,18 @@ Choses a faire
 - Générer les pages qui manquent, sans contenue, juste les pages plus les controleurs au besoins (fait)
 - Pages Espace Candidat
     - Infos candidat
-        - Voir le detail
-        - Modifier les infos sauf mdp
+        - Voir le detail (fait)
+        - Modifier les infos sauf mdp 
         - modifier le mdp
         - supprimer compte 
-
-
 
 - Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page
 - Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
 - Ameliorations pour trello
     - Notif coté admin quand un candidat s'inscrit
     - Badge "Nouveau" sur la carte
-
-Questions 
-- Formulaire de contact utile ?
-- Système d'avis / commentaire ?
-- Système mot de passe oublié ?
-- Version Anglaise ?
+- Faire un système d'avis
+    - Créer la page "Donner votre avis"
+- Faire en sorte qu'on puisse reinitialisé le mot de passe au moment de la connexion
+- Faire une version anglaise
+- Mode black (mettre le site en fond noir)

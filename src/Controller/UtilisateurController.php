@@ -149,17 +149,69 @@ final class UtilisateurController extends AbstractController
         return $this->render('utilisateur/Candidat/espaceCandidat.html.twig');
     }
     // Profil candidat
-    #[Route('/espaceCandidat/profil', name: 'Utilisateur_ProfilCandidat')]
-    public function profilCandidat(): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_CANDIDAT'); // Autorise uniquement les utilisateurs avec le role ROLE_CANDIDAT
-        $candidat = $this->getUser();
+        // Affichage des infos candidat
+        #[Route('/espaceCandidat/profil', name: 'Utilisateur_ProfilCandidat')]
+        public function profilCandidat(): Response
+        {
+            $this->denyAccessUnlessGranted('ROLE_CANDIDAT'); // Autorise uniquement les utilisateurs avec le role ROLE_CANDIDAT
+            $candidat = $this->getUser();
 
-        return $this->render('utilisateur/Candidat/profilCandidat.html.twig', [
-            'candidat' => $candidat,
-        ]);
-    }
+            return $this->render('utilisateur/Candidat/profilCandidat.html.twig', [
+                'candidat' => $candidat,
+            ]);
+        }
+        // Modif Infos Candidat
+        #[Route('/espaceCandidat/profil/modifiersonprofil', name: 'Utilisateur_modifierProfilCandidat')]
+        public function modifierProfilCandidat(Request $request, EntityManagerInterface $em): Response
+        {
+            $candidat = $this->getUser();
 
+            if ($request->isMethod('POST')) {
+
+                $candidat->setNom($request->request->get('nom'));
+                $candidat->setPrenom($request->request->get('prenom'));
+                $candidat->setEmail($request->request->get('email'));
+                $candidat->setTelephone($request->request->get('telephone'));
+                $candidat->setPays($request->request->get('pays'));
+                $candidat->setVille($request->request->get('ville'));
+                $candidat->setLinkedin($request->request->get('linkedin'));
+                $candidat->setDescription($request->request->get('description'));
+
+                // 📅 date naissance
+                if ($request->request->get('datedenaissance')) {
+                    $candidat->setDatedenaissance(
+                        new \DateTime($request->request->get('datedenaissance'))
+                    );
+                }
+
+                // 🧠 besoins (array)
+                $candidat->setBesoin($request->request->all('besoins'));
+
+                // 🔎 recherche (array)
+                $candidat->setRecherche($request->request->all('recherche'));
+
+                // 📄 CV upload
+                $cvFile = $request->files->get('cv');
+
+                if ($cvFile) {
+                    $newFileName = uniqid().'.'.$cvFile->guessExtension();
+
+                    $cvFile->move(
+                        $this->getParameter('kernel.project_dir').'/public/uploads/cv',
+                        $newFileName
+                    );
+
+                    $candidat->setCv($newFileName);
+                }
+
+                $em->flush();
+
+                return $this->redirectToRoute('Utilisateur_ProfilCandidat');
+            }
+            return $this->render('utilisateur/Candidat/modifierProfilCandidat.html.twig', [
+                'candidat' => $candidat,
+            ]);
+        }
 
 
     #[Route('/espaceEntreprise', name: 'Utilisateur_espaceEntreprise')]

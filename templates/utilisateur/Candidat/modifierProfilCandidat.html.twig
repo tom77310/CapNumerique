@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Modifier mon profil {% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 text-decoration-underline">
+            Modifier mon profil
+        </h1>
+        <div class="card shadow p-4">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" name="nom" class="form-control" value="{{ candidat.nom }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Prénom</label>
+                    <input type="text" name="prenom" class="form-control" value="{{ candidat.prenom }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ candidat.email }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" name="telephone" class="form-control" value="{{ candidat.telephone }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Pays</label>
+                    <input type="text" name="pays" class="form-control" value="{{ candidat.pays }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ville</label>
+                    <input type="text" name="ville" class="form-control" value="{{ candidat.ville }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date de naissance</label>
+                    <input type="date" name="datedenaissance" class="form-control"
+                        value="{{ candidat.datedenaissance ? candidat.datedenaissance|date('Y-m-d') : '' }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Lien linkedin</label>
+                    <input type="text" name="linkedin" class="form-control" value="{{ candidat.linkedin }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">CV</label>
+
+                    {% if candidat.cv %}
+                        <p>
+                            CV actuel :
+                            <a href="{{ asset('uploads/cv/' ~ candidat.cv) }}" target="_blank">
+                                {{ candidat.cv }}
+                            </a>
+                        </p>
+                    {% endif %}
+
+                    <input type="file" name="cv" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" name="description" class="form-control" value="{{ candidat.description }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Vos Besoins</label>
+
+                    {% set options = ['insertion', 'orientation'] %}
+
+                    {% for option in options %}
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                name="besoins[]"
+                                value="{{ option }}"
+                                {% if option in candidat.besoin %}checked{% endif %}>
+                            <label class="form-check-label">{{ option }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Vos Recherches</label>
+
+                    {% set options = ['Stage', 'cdi', 'alternance', 'freelance'] %}
+
+                    {% for option in options %}
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                name="recherche[]"
+                                value="{{ option }}"
+                                {% if option in candidat.recherche %}checked{% endif %}>
+                            <label class="form-check-label">{{ option }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <a href="{{ path('Utilisateur_ProfilCandidat')}}" class="btn btn-secondary">
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-success">
+                    Enregistrer les modifications
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
