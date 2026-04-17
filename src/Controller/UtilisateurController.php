@@ -167,4 +167,26 @@ final class UtilisateurController extends AbstractController
     {
         return $this->render('utilisateur/Entreprises/espaceEntreprise.html.twig');
     }
+
+
+
+    // Pages dans la barre de nav
+    // Orientation Pro
+    #[Route('/orientationpro', name: 'Utilisateur_orientationpro')]
+    public function orientationPro(): Response
+    {
+        return $this->render('utilisateur/orientationpro.html.twig');
+    }
+    // Insertion Pro
+    #[Route('/insertionpro', name: 'Utilisateur_insertionpro')]
+    public function insertionPro(): Response
+    {
+        return $this->render('utilisateur/insertionpro.html.twig');
+    }
+    // Metiers de la tech
+    #[Route('/metiersdelatech', name: 'Utilisateur_metierstech')]
+    public function metiersDeLaTech(): Response
+    {
+        return $this->render('utilisateur/metierstech.html.twig');
+    }
 }

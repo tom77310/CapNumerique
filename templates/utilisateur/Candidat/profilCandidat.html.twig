@@ -5,36 +5,41 @@
 {% block body %}
 
     <div class="container mt-5">
-        <h1 class="text-center mb-4 text-decoration-underline">Mon profil condidat</h1>
+        <h1 class="text-center mb-4 text-decoration-underline">Mon profil candidat</h1>
 
         <div class="card shadow p-4">
-            <div class="col-md-6">
-                <strong>Votre genre :</strong>
-                <p>{{candidat.sexe}}</p>
+
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Nom de famille </strong>
+                    <p>{{candidat.nom}}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Prenom</strong>
+                    <p>{{candidat.prenom}}</p>
+                </div>
             </div>
-            <div class="col-md-6">
-                <strong>Nom de famille </strong>
-                <p>{{candidat.nom}}</p>
-            </div>
-            <div class="col-md-6">
-                <strong>Prenom</strong>
-                <p>{{candidat.prenom}}</p>
-            </div>
-            <div class="col-md-6">
-                <strong>Numéro de téléphone </strong>
-                <p>{{candidat.telephone}}</p>
-            </div>
-            <div class="col-md-6">
-                <strong>Votre adresse email :</strong>
-                <p>{{candidat.email}}</p>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Numéro de téléphone </strong>
+                    <p>{{candidat.telephone}}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Votre adresse email :</strong>
+                    <p>{{candidat.email}}</p>
+                </div>                        
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
                     <strong>Votre date de naissance :</strong>
-                    <p>
-                        {{ candidat.datedenaissance ? candidat.datedenaissance|date('d/m/Y') : 'Date de naissance non renseignée'}}
-                    </p>
+                    <p>{{ candidat.datedenaissance ? candidat.datedenaissance|date('d/m/Y') : 'Date de naissance non renseignée'}}</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Votre genre :</strong>
+                    <p>{{candidat.sexe}}</p>
                 </div>
             </div>
 

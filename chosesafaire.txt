@@ -69,7 +69,9 @@ Choses a faire
 09/04/26
         - Remplacé "modifier le nom" et "supprimé la carte" par des icones (fait)
         - Des que je m'inscris, une carte trello est créer avec les infos utilisateur, et elle est ensuite ajouter dans le tableau trello (fait)
-10/04/26
+
+17/04/26
+- Générer les pages qui manquent, sans contenue, juste les pages plus les controleurs au besoins (fait)
 - Pages Espace Candidat
     - Infos candidat
         - Voir le detail
@@ -80,11 +82,13 @@ Choses a faire
 
 
 - Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page
-
 - Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
+- Ameliorations pour trello
+    - Notif coté admin quand un candidat s'inscrit
+    - Badge "Nouveau" sur la carte
 
 Questions 
-- formulaire de contact utile ?
+- Formulaire de contact utile ?
 - Système d'avis / commentaire ?
-- système mot de passe oublié 
+- Système mot de passe oublié ?
 - Version Anglaise ?

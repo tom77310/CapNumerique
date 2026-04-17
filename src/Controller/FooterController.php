@@ -29,4 +29,17 @@ final class FooterController extends AbstractController
     {
         return $this->render('footer/CGU.html.twig');
     }
+
+    // Page Prochains évènements
+    #[Route('/prochainsevenements', name: 'footer_prochainsevenements')]
+    public function prochainsEvenements(): Response
+    {
+        return $this->render('footer/prochainsevenements.html.twig');
+    }
+    // Page Vidéos Témoignages
+    #[Route('/videostemoignages', name: 'footer_videostemoignages')]
+    public function videosTemoignages(): Response
+    {
+        return $this->render('footer/videostemoignages.html.twig');
+    }
 }
