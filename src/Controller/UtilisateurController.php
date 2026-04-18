@@ -6,8 +6,10 @@ use App\Entity\CarteTrello;
 use App\Entity\Utilisateur;
 use App\Form\FormCandidatType;
 use App\Form\FormEntrepriseType;
+use App\Form\ModifCandidatFormType;
 use App\Repository\CarteTrelloRepository;
 use App\Repository\ColonneTrelloRepository;
+use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -164,52 +166,56 @@ final class UtilisateurController extends AbstractController
         #[Route('/espaceCandidat/profil/modifiersonprofil', name: 'Utilisateur_modifierProfilCandidat')]
         public function modifierProfilCandidat(Request $request, EntityManagerInterface $em): Response
         {
+            /** @var \App\Entity\Utilisateur $candidat */ // Garder pour éviter que VSCode ne souligne les methode setCV et getCV
             $candidat = $this->getUser();
+            $formmodifcandidat = $this->createForm(ModifCandidatFormType::class, $candidat);
+            $formmodifcandidat->handleRequest($request);
 
-            if ($request->isMethod('POST')) {
-
-                $candidat->setNom($request->request->get('nom'));
-                $candidat->setPrenom($request->request->get('prenom'));
-                $candidat->setEmail($request->request->get('email'));
-                $candidat->setTelephone($request->request->get('telephone'));
-                $candidat->setPays($request->request->get('pays'));
-                $candidat->setVille($request->request->get('ville'));
-                $candidat->setLinkedin($request->request->get('linkedin'));
-                $candidat->setDescription($request->request->get('description'));
-
-                // 📅 date naissance
-                if ($request->request->get('datedenaissance')) {
-                    $candidat->setDatedenaissance(
-                        new \DateTime($request->request->get('datedenaissance'))
-                    );
-                }
-
-                // 🧠 besoins (array)
-                $candidat->setBesoin($request->request->all('besoins'));
-
-                // 🔎 recherche (array)
-                $candidat->setRecherche($request->request->all('recherche'));
-
-                // 📄 CV upload
-                $cvFile = $request->files->get('cv');
+            if ($formmodifcandidat->isSubmitted() && $formmodifcandidat->isValid()) {
+                // Gestion du CV
+                $cvFile = $formmodifcandidat->get('cv')->getData();
 
                 if ($cvFile) {
-                    $newFileName = uniqid().'.'.$cvFile->guessExtension();
 
+                    // 🧹 Supprimer l'ancien CV
+                    if ($candidat->getCV()) {
+
+                        $ancienCV = $this->getParameter('kernel.project_dir') 
+                            . '/public/uploads/cv/' 
+                            . $candidat->getCV();
+
+                        if (file_exists($ancienCV)) {
+                            unlink($ancienCV);
+                        }
+                    }
+
+                    // 📛 Nettoyer nom/prénom
+                    $nomCandidat = strtolower(str_replace(' ', '_', $candidat->getNom()));
+                    $prenomCandidat = strtolower(str_replace(' ', '_', $candidat->getPrenom()));
+
+                    // 📅 date
+                    $dateupload = (new \DateTime())->format('d-m-Y');
+
+                    // 📄 extension
+                    $extension = $cvFile->guessExtension();
+
+                    // 🏷️ Nouveau nom
+                    $newFileName = "CV-{$nomCandidat}_{$prenomCandidat}_{$dateupload}.{$extension}";
+
+                    // 📁 Upload
                     $cvFile->move(
-                        $this->getParameter('kernel.project_dir').'/public/uploads/cv',
+                        $this->getParameter('kernel.project_dir') . '/public/uploads/cv/',
                         $newFileName
                     );
 
-                    $candidat->setCv($newFileName);
+                    // 💾 Sauvegarde en base
+                    $candidat->setCV($newFileName);
                 }
-
                 $em->flush();
-
                 return $this->redirectToRoute('Utilisateur_ProfilCandidat');
             }
             return $this->render('utilisateur/Candidat/modifierProfilCandidat.html.twig', [
-                'candidat' => $candidat,
+                'formmodifcandidat' => $formmodifcandidat->createView(),
             ]);
         }
 
