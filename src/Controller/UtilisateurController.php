@@ -13,10 +13,12 @@ use App\Repository\ColonneTrelloRepository;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 #[Route('/utilisateur')]
 final class UtilisateurController extends AbstractController
@@ -254,6 +256,44 @@ final class UtilisateurController extends AbstractController
             return $this->render('utilisateur/Candidat/modifierMotDePasseCandidat.html.twig', [
                 'form' => $form->createView(),
             ]);
+        }
+        // Supprimer le compte Candidat
+        #[Route('/espaceCandidat/profil/supprimercomptecandidat', name: 'Utilisateur_SupprimerCompteCandidat', methods: ['POST'])]
+        public function SupprimerCompteCandidat(Request $request, EntityManagerInterface $em, Security $security): Response
+        {
+            /** @var \App\Entity\Utilisateur $candidat */ // Ne pas enlever pour ne pas avoir de bug visuel de l'IDE
+            $candidat = $this->getUser();
+
+            // Sécurité : Verification CSRF
+            if (!$this->isCsrfTokenValid('suppressioncomptecandidat', $request->request->get('_token'))) {
+                throw $this->createAccessDeniedException('Token CSRF invalide');
+            }
+
+            // Suppression du CV si il existe
+            if ($candidat->getCV()) {
+                $file = $this->getParameter('kernel.project_dir').'/public/uploads/cv/'.$candidat->getCV();
+                // Si le fichier existe, on le supprime
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+            }
+
+            // Suppression de la carte trello
+            $cartes = $em->getRepository(CarteTrello::class)->findBy(['utilisateur' => $candidat]);
+
+            // tant qu'une carte existe et est associé a un utilisateur, on la supprime
+            foreach ($cartes as $carte){
+                $em->remove($carte);
+            }
+
+            // Deconnexion avant la suppresion
+            $security->logout(false);
+            // Suppression de l'utilisateur
+            $em->remove($candidat);
+            $em->flush();
+
+            // redirection apres suppression
+            return $this->redirectToRoute('app_default');
         }
 
     #[Route('/espaceEntreprise', name: 'Utilisateur_espaceEntreprise')]

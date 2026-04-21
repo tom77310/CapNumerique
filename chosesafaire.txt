@@ -80,7 +80,8 @@ Du 04 au 22/03/2026
 21/04/26
         - Modifier les infos sauf mdp (fait)
         - modifier le mdp (fait)
-        - supprimer compte
+        - supprimer compte (fait)
+        
     - Page pour prendre rdv
         - Faire une page avec un moyen de prendre rdv
         - Une page de recap du rdv pris
