@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CarteTrello;
 use App\Entity\Utilisateur;
+use App\Form\ChangePasswordCandidatType;
 use App\Form\FormCandidatType;
 use App\Form\FormEntrepriseType;
 use App\Form\ModifCandidatFormType;
@@ -163,7 +164,7 @@ final class UtilisateurController extends AbstractController
             ]);
         }
         // Modif Infos Candidat
-        #[Route('/espaceCandidat/profil/modifiersonprofil', name: 'Utilisateur_modifierProfilCandidat')]
+        #[Route('/espaceCandidat/profil/modifiermonprofil', name: 'Utilisateur_modifierProfilCandidat')]
         public function modifierProfilCandidat(Request $request, EntityManagerInterface $em): Response
         {
             /** @var \App\Entity\Utilisateur $candidat */ // Garder pour éviter que VSCode ne souligne les methode setCV et getCV
@@ -218,7 +219,42 @@ final class UtilisateurController extends AbstractController
                 'formmodifcandidat' => $formmodifcandidat->createView(),
             ]);
         }
+        // Modifier le mot de passe Candidat uniquement
+        #[Route('/espaceCandidat/profil/modifiermotdepasse', name: 'Utilisateur_modifierMotDePasse')]
+        public function modifierMotDePasseCandidat(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+        {
+            /** @var \App\Entity\Utilisateur $candidat */ // Garder pour éviter un bug visuel VSCode
+            $candidat = $this->getUser();
 
+            $form = $this->createForm(ChangePasswordCandidatType::class); // Formulaire modif mot de passe
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $Ancienmdp = $form->get('Ancienmdp')->getData();
+                $Nouveaumdp = $form->get('Nouveaumdp')->getData();
+
+                // Vérification du mot de passe actuel
+                if (!$passwordHasher->isPasswordValid($candidat, $Ancienmdp)) {
+                    $this->addFlash('danger', 'Mot de passe actuel incorrect');
+                } elseif ($Nouveaumdp) {
+                    // Hash du nouveau mot de passe
+                    $hashedPassword = $passwordHasher->hashPassword($candidat, $Nouveaumdp);
+                    $candidat->setPassword($hashedPassword);
+
+                    $em->flush();
+
+                    $this->addFlash('success', 'Mot de passe modifié avec succès');
+
+                    return $this->redirectToRoute('Utilisateur_ProfilCandidat');
+                } else {
+                    $this->addFlash('warning', 'Veuillez saisir un nouveau mot de passe');
+                }
+            }
+
+            return $this->render('utilisateur/Candidat/modifierMotDePasseCandidat.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
 
     #[Route('/espaceEntreprise', name: 'Utilisateur_espaceEntreprise')]
     public function espaceEntreprise(): Response

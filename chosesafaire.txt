@@ -77,9 +77,13 @@ Du 04 au 22/03/2026
 - Pages Espace Candidat
     - Infos candidat
         - Voir le detail (fait)
-        - Modifier les infos sauf mdp 
-        - modifier le mdp
-        - supprimer compte 
+21/04/26
+        - Modifier les infos sauf mdp (fait)
+        - modifier le mdp (fait)
+        - supprimer compte
+    - Page pour prendre rdv
+        - Faire une page avec un moyen de prendre rdv
+        - Une page de recap du rdv pris
 
 - Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page
 - Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
@@ -91,3 +95,4 @@ Du 04 au 22/03/2026
 - Faire en sorte qu'on puisse reinitialisé le mot de passe au moment de la connexion
 - Faire une version anglaise
 - Mode black (mettre le site en fond noir)
+- Sécurité

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Modifier Mon Mot De Passe {% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center text-decoration-underline mb-4">
+        Modifier mon mot de passe
+    </h1>
+
+    {# Message flash #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <div class="card p-4 col-md-6 mx-auto mb-3"> {# Div qui contient tous le formulaire sauf le titre #}
+        {{ form_start(form) }}
+            <div class="mb-3">
+                <label class="form-label">Entrez votre mot de passe actuel</label>
+                {{ form_widget(form.Ancienmdp) }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Entrez votre nouveau mot de passe</label>
+                {{ form_widget(form.Nouveaumdp) }}
+            </div>
+            <div class="d-flex justify-content-center mt-4 gap-3">
+                <a href="{{ path('Utilisateur_ProfilCandidat')}}" class="btn btn-secondary">
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-success">
+                    Sauvegarder
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
