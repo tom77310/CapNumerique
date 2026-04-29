@@ -153,12 +153,12 @@
                         position: index + 1
                     }));
 
-                    fetch('{{ path("Admin_deplacementcartetrello")}}', {
+                    fetch('{{ path("Trello_deplacementcartetrello")}}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': '{{ csrf_token("Admin_deplacementcartetrello") }}'
+                            'X-CSRF-TOKEN': '{{ csrf_token("Trello_deplacementcartetrello") }}'
                         },
                         body: JSON.stringify({
                             colonneId: colonneId,
@@ -199,7 +199,7 @@
                     position: index + 1
                 }));
 
-                fetch('{{ path("update_position_colonnes") }}', {
+                fetch('{{ path("Trello_MAJPositionColonnes") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -237,7 +237,7 @@
 
                 const cvLink = document.getElementById('modalCv');
                 if (this.dataset.cv) {
-                    cvLink.href = '/utilisateur/admin/trello/download/cv/' + this.dataset.cv;
+                    cvLink.href = '/gestionCandidat/trello/TelechargerCV/' + this.dataset.cv;
                     cvLink.style.display = 'inline';
                 } else {
                     cvLink.style.display = 'none';
@@ -294,7 +294,7 @@
 
             if (!confirm('Supprimer cette carte ?')) return;
 
-            fetch('/utilisateur/admin/trello/delete-card', {
+            fetch('/gestionCandidat/trello/SupprimerCarte', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -314,7 +314,7 @@
 
             if (!confirm('ATTENTION ! Vous allez supprimer la carte ET l\'utilisateur associé ! Êtes vous sûr de continuer ?')) return;
 
-            fetch('/utilisateur/admin/trello/delete-user', {
+            fetch('/gestionCandidat/trello/SupprimerUtilisateur', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -341,7 +341,7 @@
                 const nouveauTitre = prompt('Modifier le titre :', titreActuel);
                 if (!nouveauTitre) return;
 
-                fetch('{{ path("modifier_colonne") }}', {
+                fetch('{{ path("Trello_ModifierColonne") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -376,7 +376,7 @@
             // IMPORTANT : on cible uniquement le vrai conteneur colonne
             const colonneElement = deleteBtn.closest('.colonne-item');
 
-            fetch('{{ path("delete_colonne") }}', {
+            fetch('{{ path("Trello_SupprimerColonne") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -418,7 +418,7 @@
                 return;
             }
 
-            fetch('{{ path("add_colonne") }}', {
+            fetch('{{ path("Trello_AjoutColonne") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
