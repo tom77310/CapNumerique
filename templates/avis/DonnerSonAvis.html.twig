@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un avis{% endblock %}
+
+{% block body %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="text-center mb-5">
+                <h1 class="fw-bold text-primary text-decoration-underline">Donner un avis</h1>
+                <p class="text-muted">Partagez votre expérience avec Cap Numérique</p>
+            </div>
+
+            {% if app.user %}
+                <div class="card shadow-sm border-0 rounded-4 mb-5">
+                    <div class="card-body p-4">
+                        <h3 class="mb-4">Ajouter un avis</h3>
+                        {{ form(form) }}
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center rounded-4 shadow-sm">
+                    Connectez-vous pour laisser un avis.
+                </div>
+            {% endif %}
+
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4 text-dark">Avis des autres utilisateurs</h2>
+
+                    {% for avis in avisListe %}
+
+                        <div class="border rounded-4 p-4 mb-4 bg-light">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-primary">
+                                    {{ avis.utilisateur.email }}
+                                </strong>
+
+                                <span class="badge bg-warning text-dark fs-6">
+                                    {{ avis.note }}/5 ⭐
+                                </span>
+                            </div>
+
+                            <p class="mb-2 text-dark">
+                                {{ avis.contenu }}
+                            </p>
+
+                            <small class="text-muted d-block mb-3">
+                                {{ avis.createdAt|date('d/m/Y à H:i') }}
+                            </small>
+
+                            {% if app.user and (app.user == avis.utilisateur or is_granted('ROLE_ADMIN')) %}
+                                <div class="d-flex gap-2">
+
+                                    <a href="{{ path('Avis_ModifierAvis', {id: avis.id}) }}"
+                                       class="btn btn-warning btn-sm rounded-pill px-3">
+                                        Modifier l'avis
+                                    </a>
+
+                                    <a href="{{ path('Avis_SupprimerAvis', {id: avis.id}) }}"
+                                       class="btn btn-danger btn-sm rounded-pill px-3"
+                                       onclick="return confirm('Êtes-vous certain(e) de vouloir supprimer cet avis ?')">
+                                        Supprimer l'avis
+                                    </a>
+
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="alert alert-secondary text-center">
+                            Aucun avis pour le moment.
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modifier mon avis</h1>
+
+    {{ form(form) }}
+
+    <a href="{{ path('Avis_AffichageAvis')}}" class="btn btn-primary">Retour </a>
+{% endblock %}

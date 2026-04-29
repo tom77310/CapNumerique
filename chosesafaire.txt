@@ -90,23 +90,39 @@ Du 04 au 22/03/2026
         - Améliorer le design de la page de prise de rdv (fait)
 29/04/2026
 - Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page (fait)
-- Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
-- Ameliorations pour trello
-    - Notif coté admin quand un candidat s'inscrit
-    - Badge "Nouveau" sur la carte
+- Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé. (fait)
 - Faire un système d'avis
-    - Créer la page "Donner votre avis"
+        - Créer un avis (fait)
+        - Modifier son avis (uniquement auteur + admin) (fait)
+        - Supprimer son avis (uniquement auteur + admin) (fait)
+        - Voir tous les avis connecter ou non (fait)
+    - Créer la page "Donner votre avis" (fait)
+    - Design page modif avis
+    - Un admin ne peut pas modifier n'importe quel avis
+    - menu deroulant pour choisir la note
+    - figé l'espace pour mettre un commentaire
+    - MAJ Heure pour la modif commentaire
+    - Limiter à un avis par utilisateur
+    - Like sur les avis
+    - Reponse aux avis, utilisateur ou admin
+- Modifier l'espace candidat
+    - Faire une page ou il peut gérér et voir les avis déposé
+- Espace Admin
+    - Ajouter une page pour gérer les avis
+    - Essayer d'integrer google agenda, ou outlook, directement dans le site depuis l'espace admin
+- Espace Entreprise
+    - Modif profil
+    - Modif mdp
+    - Supprimer profil
 - Faire en sorte qu'on puisse reinitialisé le mot de passe au moment de la connexion
-    - Espace Admin
-        - Essayer d'integrer google agenda, ou outlook, directement dans le site depuis l'espace admin
-    - Espace Entreprise
-        - Modif profil
-        - Modif mdp
-        - Supprimer profil
 - Page d'accueil
 - Faire une version anglaise
 - Mode black (mettre le site en fond noir)
-- Sécurité
+- Sécurité et test
+- Commentaires partout
 
-Autre ameliorations pour une autre version du site
+Ameliorations pour une potentiel V2 du site :
 - Une page de recap du rdv pris : Une API doit être utilisée obligatoirement pour filtrer les rendez vous en fonction des utilisateurs
+- Ameliorations pour trello
+    - Notif coté admin quand un candidat s'inscrit
+    - Badge "Nouveau" sur la carte
