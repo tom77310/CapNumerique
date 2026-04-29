@@ -295,6 +295,13 @@ final class UtilisateurController extends AbstractController
             // redirection apres suppression
             return $this->redirectToRoute('app_default');
         }
+        
+        // Page pour prendre RDV Candidat
+        #[Route('/espaceCandidat/profil/prendrerdv', name: 'Utilisateur_RDVCandidat')]
+        public function CandidatRDV(): Response
+        {
+            return $this->render('utilisateur/Candidat/rendezvouscandidat.html.twig');
+        }
 
     #[Route('/espaceEntreprise', name: 'Utilisateur_espaceEntreprise')]
     public function espaceEntreprise(): Response

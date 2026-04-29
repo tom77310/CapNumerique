@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
 class FormCandidatType extends AbstractType
 {
@@ -78,6 +80,15 @@ class FormCandidatType extends AbstractType
             'label' => 'S\'inscrire',
             'attr' => [
                 'class' => 'w-100 mt-4 btn btn-dark'
+            ]
+        ])
+        ->add('accepterConfidentialite', CheckboxType::class, [
+            'mapped' => false,
+            'label' => "J'accepte la politique de confidentialité",
+            'constraints' => [
+                new IsTrue([
+                    'message' => 'Vous devez accepter la politique de confidentialité.'
+                ])
             ]
         ])
         ;

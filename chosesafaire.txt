@@ -81,12 +81,15 @@ Du 04 au 22/03/2026
         - Modifier les infos sauf mdp (fait)
         - modifier le mdp (fait)
         - supprimer compte (fait)
-        
+22/04/26
     - Page pour prendre rdv
-        - Faire une page avec un moyen de prendre rdv
-        - Une page de recap du rdv pris
-
-- Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page
+        - configurer calendly pour synchronise un calendrier google (fait)
+        - Faire une page avec un moyen de prendre rdv (fait)
+27/04/26
+        - Rajouter un texte qui explique comment prendre rdv (fait)
+        - Améliorer le design de la page de prise de rdv (fait)
+29/04/2026
+- Dans le formulaire candidat, mettre un checkbox obligatoire pour accepter la politique de confidentialité, avec accès a la page (fait)
 - Faire un trelloController et mettre toutes les methodes correspondantes. Ce qui ferait plus organisé.
 - Ameliorations pour trello
     - Notif coté admin quand un candidat s'inscrit
@@ -94,6 +97,16 @@ Du 04 au 22/03/2026
 - Faire un système d'avis
     - Créer la page "Donner votre avis"
 - Faire en sorte qu'on puisse reinitialisé le mot de passe au moment de la connexion
+    - Espace Admin
+        - Essayer d'integrer google agenda, ou outlook, directement dans le site depuis l'espace admin
+    - Espace Entreprise
+        - Modif profil
+        - Modif mdp
+        - Supprimer profil
+- Page d'accueil
 - Faire une version anglaise
 - Mode black (mettre le site en fond noir)
 - Sécurité
+
+Autre ameliorations pour une autre version du site
+- Une page de recap du rdv pris : Une API doit être utilisée obligatoirement pour filtrer les rendez vous en fonction des utilisateurs

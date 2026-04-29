@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Prendre Rendez vous {% endblock %}
+
+{% block body %}
+    <h1 class="text-center text-decoration-underline mb-4">
+        Prendre un rendez-vous
+    </h1>
+    <div class="card border-0 shadow-lg rounded-4 p-4 mb-4 bg-light text-center">
+        <h4 class="mb-3 text-decoration-underline text-primary">
+            Réservez votre accompagnement en quelques clics
+        </h4>
+        <p class="mb-2">
+            Sélectionnez une date disponible dans le calendrier ci-dessous, <br>
+            puis selectionnez un créneau dans la fenetre de droite quand vous cliquez sur une date. <br>
+            Ensuite, complétez les informations demandées pour confirmer votre rendez-vous. <br>
+            Enfin, un code vous sera envoyé par mail afin de confirmer votre Mail.
+        </p>
+        <p class="mb-2">
+            Une confirmation du rendez-vous vous sera ensuite envoyée avec les détails de l'échange. <br>
+            Vous pouvez a tous moment, replanifier ou annuler votre rendez vous, via les liens présent dans le mail de confirmation.
+        </p>
+
+        <p class="mb-0 fw-bold">
+            Simple, rapide et 100% en ligne
+        </p>
+    </div>
+    <hr class="my-4">
+    <div class="row text-center mx-0">
+        <div class="col-md-3 mb-2">
+            <strong>Durée : 30 min</strong>
+        </div>
+        <div class="col-md-3 mb-2">
+            <strong>En ligne</strong>
+        </div>
+        <div class="col-md-3 mb-2">
+            <strong>Simple et Gratuit</strong>
+        </div>
+        <div class="col-md-3 mb-2">
+            <strong>Confirmation par e-mail</strong>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-lg rounded-4 p-3 overflow-hidden">  
+        <iframe src="https://calendly.com/thomas-lemaire-pro77/nouvelle-reunion" 
+            style="display:block; width:100%; max-width:100%; height:820px; border:none;"> 
+        </iframe> 
+    </div>
+{% endblock %}
